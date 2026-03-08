@@ -2,17 +2,19 @@
   <% unless contextualization.results_body_hidden? %>
     <%= render partial: 'exercise_solutions/expectations', locals: {assignment: contextualization} %>
     <% if render_feedback?(contextualization) %>
+      <% results_section_id = "results-section-#{contextualization.object_id}" %>
       <div class="results-item">
         <strong><%= t :feedback %>:</strong>
         <div>
           <%= contextualization.feedback_html %>
         </div>
-        <a data-bs-toggle="collapse" href="#results-section" class="text-danger">
+        <a data-bs-toggle="collapse" href="#<%= results_section_id %>" class="text-danger">
           <%= fa_icon 'question-circle' %> <%= t :details %>
         </a>
       </div>
     <% end %>
-    <div id="results-section" class="<%= 'collapse' if render_feedback?(contextualization) %> results-item">
+    <% results_section_id ||= "results-section-#{contextualization.object_id}" %>
+    <div id="<%= results_section_id %>" class="<%= 'collapse' if render_feedback?(contextualization) %> results-item">
       <%= render_test_results contextualization %>
     </div>
   <% end %>
