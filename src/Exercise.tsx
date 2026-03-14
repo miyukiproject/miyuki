@@ -81,8 +81,8 @@ const ExpectationResult: React.FC<{ expectations: AnalysisResult[] }> = ({ expec
         ✖ {t("failedExpectations")}
       </h4>
       <div className="bg-white border rounded p-3 text-sm font-mono">
-        {expectations.map(({ rule: { inspection, binding }, passed, error }, index) => (
-          <p key={index}>{passed ? '✔' : '✖'} {inspection} {binding} {error}</p>
+        {expectations.map(({ rule: { inspection, args, binding }, passed, error }, index) => (
+          <p key={index}>{passed ? '✔' : '✖'} {binding} {inspection} {args} {error}</p>
         ))}
       </div>
     </div>
