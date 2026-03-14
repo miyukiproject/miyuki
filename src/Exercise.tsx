@@ -2,7 +2,7 @@ import Editor, { OnMount } from "@monaco-editor/react"
 import React, { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router"
-import { Tester, TestReport } from "yukigo"
+import { Analyzer, Tester, TestReport } from "yukigo"
 import { YukigoHaskellParser } from "yukigo-haskell-parser"
 import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext"
 import { Description } from "./Description"
@@ -145,6 +145,21 @@ const Exercise: React.FC = () => {
     const tester = new Tester(ast, interpreterConfig);
     const tests = parser.parse(exercise.test);
     const testResults = tester.test(tests);
+
+    if (testResults[0].status === 'passed') {
+      const analyzer = new Analyzer();
+      // Expectations example:
+      // [
+      //   {
+      //     "args": [{ "name": "cantidadDiasEnero" }],
+      //     "inspection": "HasBinding",
+      //     "expected": true
+      //   }
+      // ]
+      const expectationResults = analyzer.analyze(ast, exercise.expectations || []);
+      // TODO: setExpectations(expectationResults) and show them
+      console.log({ expectationResults })
+    }
 
     setResult(testResults[0])
     setProcessing(false)

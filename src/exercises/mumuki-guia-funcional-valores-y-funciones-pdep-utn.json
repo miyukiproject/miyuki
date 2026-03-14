@@ -60,8 +60,9 @@
       "test": "describe \"cantidadDiasEnero\" $ do\n  it \"es igual a 31\" $ do\n    cantidadDiasEnero `shouldBe` 31\n",
       "expectations": [
         {
-          "binding": "cantidadDiasEnero",
-          "inspection": "HasBinding"
+          "args": [{ "name": "cantidadDiasEnero" }],
+          "inspection": "HasBinding",
+          "expected": true
         }
       ]
     },
