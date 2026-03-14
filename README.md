@@ -39,13 +39,13 @@ In order to better express and enforce those beliefs, we have:
 ## Install
 
 ```
-yarn install
+npm install
 ```
 
 ## Start
 
 ```
-yarn start
+npm start
 ```
 
 ## Architecture
