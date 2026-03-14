@@ -1,5 +1,6 @@
 import { Topic } from "./topic";
 import { Content } from "./content"
+import chapter from "../exercises/mumuki-tema-introduccion-a-la-programacion-funcional-pdep-utn.json"
 
 export class Book extends Content {
   public chapters: Chapter[] = []
@@ -16,3 +17,10 @@ export class Chapter {
     public readonly number: number
   ) { }
 }
+
+export const pdep = {
+  id: 1,
+  name: "PdeP",
+}
+
+export const functional = chapter

@@ -1,43 +1,19 @@
-import React, { useState, useRef } from "react"
 import Editor, { OnMount } from "@monaco-editor/react"
-import { ProgressStatus } from "./ProgressStatus"
-import { ProgressBar } from "./ProgressBar"
-import { Topic } from "./model/topic"
-import { Book } from "./model/book"
-import { Guide, Exercise as ExerciseModel } from "./model/guide"
+import React, { useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import Markdown from "react-markdown"
+import { Link, useParams } from "react-router"
+import rehypeRaw from "rehype-raw"
 import { DeepPartial } from "./helpers/DeepPartial"
 import { Main } from "./Main"
-import { useTranslation } from "react-i18next"
-import { Problem } from "./model/exercises"
+import { functional, pdep } from "./model/book"
+import { Exercise as ExerciseModel } from "./model/guide"
+import { ProgressBar } from "./ProgressBar"
+import { ProgressStatus } from "./ProgressStatus"
 import { ContentTitle } from "./Title"
 
-// TODO extract
-const book: DeepPartial<Book> = {
-  name: "PdeP"
-}
-
-const chapter: DeepPartial<Topic> = {
-  name: "Programación Funcional"
-}
-
-const lesson: DeepPartial<Guide> = {
-  name: "Valores y Funciones",
-  language: { name: "Haskell" }
-}
-
-const exercise: DeepPartial<Problem> = {
-  name: "Múltiples parámetros",
-  descriptionHtml: "¿Te imaginás cómo se puede escribir la función <code>areaRectangulo</code> que calcule el área de un rectángulo?",
-  hint: "El área de un rectángulo se calcula multiplicando base por altura.",
-  defaultCode: "areaRectangulo lado1 lado2 = lado1 * lado2"
-}
-
-const nextExercise: DeepPartial<ExerciseModel> = {
-  name: "Combinando funciones",
-}
 
 type ResultStatus = "success" | "error" | null
-
 
 const ExerciseResult: React.FC<{ status: ResultStatus }> = ({ status }) => {
   const { t } = useTranslation()
@@ -80,27 +56,28 @@ const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
 )
 
 // TODO next should be generic, not just exercise
-function NextButton({ nextExercise }: { nextExercise: DeepPartial<ExerciseModel> }) {
+function NextButton({ nextExercise, onClick }: { nextExercise: DeepPartial<ExerciseModel>, onClick?: () => void }) {
   const { t } = useTranslation()
+  const { lessonId, exerciseId } = useParams()
 
   return (
-    <a
-      href="#"
+    <Link
+      to={`/lessons/${lessonId}/exercises/${Number(exerciseId) + 1}`}
       className="block w-full mt-4 bg-pink-400 hover:bg-pink-500 text-white py-3 rounded font-semibold text-center"
+      onClick={onClick}
     >
       {t("navigationContinue", { kind: t("exercise"), name: nextExercise.name })}  →
-    </a>
+    </Link>
   )
 }
 
-const Assignment: React.FC<{ showHint: boolean, setShowHint: (value: boolean) => void }> = ({ showHint, setShowHint }) => {
+const Assignment: React.FC<{ exercise: ExerciseModel, showHint: boolean, setShowHint: (value: boolean) => void }> = ({ exercise, showHint, setShowHint }) => {
   const { t } = useTranslation()
   return (
     <div>
-      <p className="mb-4" dangerouslySetInnerHTML={{
-        __html: exercise.descriptionHtml!,
-      }}>
-      </p>
+      <div className="mb-4">
+        <Markdown rehypePlugins={[rehypeRaw]}>{exercise.description}</Markdown>
+      </div>
 
       <button
         onClick={() => setShowHint(!showHint)}
@@ -120,6 +97,15 @@ const Assignment: React.FC<{ showHint: boolean, setShowHint: (value: boolean) =>
 
 const Exercise: React.FC = () => {
   const { t } = useTranslation()
+  const { lessonId, exerciseId } = useParams()
+
+  const lessonUrl = functional.lessons[Number(lessonId) - 1]
+  const lesson = require(`./exercises/${lessonUrl}`)
+  const exercise = lesson.exercises[Number(exerciseId) - 1]
+  const nextExercise = lesson.exercises[Number(exerciseId)]
+
+  // Fake progress
+  const progress = lesson.exercises.map((_: any, i: number) => ({ status: i < Number(exerciseId) ? "passed" : "pending" }))
 
   const [code, setCode] = useState<string>(exercise.defaultCode ?? "")
   const [showHint, setShowHint] = useState<boolean>(false)
@@ -152,29 +138,20 @@ const Exercise: React.FC = () => {
         ? "failed"
         : "pending"
 
+  progress[Number(exerciseId) - 1] = { status: currentProgressStatus, active: true }
+
   return (
-    <Main fullscreen={fullscreen} book={book} chapter={chapter} lesson={lesson} exercise={exercise}>
+    <Main fullscreen={fullscreen} book={pdep} chapter={functional} lesson={lesson} exercise={exercise}>
       <ContentTitle>
         {t("exerciseTitle", { number: 8, name: exercise.name })}
       </ContentTitle>
 
-      <ProgressBar
-        items={[
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: currentProgressStatus, active: true },
-          { status: "pending" },
-        ]}
-      />
+      {/* TODO: Save the progress? */}
+      <ProgressBar items={progress} />
 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Assignment setShowHint={setShowHint} showHint={showHint} />
+        <Assignment exercise={exercise} setShowHint={setShowHint} showHint={showHint} />
 
         <div className="border rounded">
           <div className="flex justify-between items-center border-b px-3 py-2">
@@ -209,7 +186,7 @@ const Exercise: React.FC = () => {
 
       <div className="mt-8">
         <ExerciseResult status={result} />
-        {result && <NextButton nextExercise={nextExercise} />}
+        {result && <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResult(null) }} />}
       </div>
     </Main>
   )

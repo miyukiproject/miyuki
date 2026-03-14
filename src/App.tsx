@@ -17,7 +17,7 @@ function App() {
         <Route path="/chapters/:chapterId" element={<Chapter />} />
         {/* <Route path="/chapters/:chapterId/appendix" element={<Appendix />} /> */}
         <Route path="/lessons/:lessonId" element={<Lesson />} />
-        <Route path="/exercises/:exerciseId" element={<Exercise />} />
+        <Route path="/lessons/:lessonId/exercises/:exerciseId" element={<Exercise />} />
         {/* <Route path="/faqs" element={<Faqs />} /> */}
       </Routes>
     </BrowserRouter>
