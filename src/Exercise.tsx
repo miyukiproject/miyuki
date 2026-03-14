@@ -2,7 +2,7 @@ import Editor, { OnMount } from "@monaco-editor/react"
 import React, { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useParams } from "react-router"
-import { Analyzer, Tester, TestReport } from "yukigo"
+import { AnalysisResult, Analyzer, Tester, TestReport } from "yukigo"
 import { YukigoHaskellParser } from "yukigo-haskell-parser"
 import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext"
 import { Description } from "./Description"
@@ -67,6 +67,28 @@ const ExerciseResult: React.FC<{ reports: TestReport[] }> = ({ reports }) => {
     </div>
   )
 }
+
+const expectationsOk = (expectations: AnalysisResult[]) => expectations.every(res => res.passed)
+
+const ExpectationResult: React.FC<{ expectations: AnalysisResult[] }> = ({ expectations }) => {
+  const { t } = useTranslation()
+  if (expectationsOk(expectations)) return <></>
+
+
+  return (
+    <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
+      <h4 className="text-red-700 font-semibold mb-2">
+        ✖ {t("failedExpectations")}
+      </h4>
+      <div className="bg-white border rounded p-3 text-sm font-mono">
+        {expectations.map(({ rule: { inspection, binding }, passed, error }, index) => (
+          <p key={index}>{passed ? '✔' : '✖'} {inspection} {binding} {error}</p>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 
 const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
   onClick,
@@ -136,6 +158,7 @@ const Exercise: React.FC = () => {
   const [showHint, setShowHint] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false)
   const [results, setResults] = useState<TestReport[] | null>(null)
+  const [expectations, setExpectations] = useState<AnalysisResult[] | null>(null)
   const [processing, setProcessing] = useState<boolean>(false)
 
   const editorRef = useRef<any>(null)
@@ -154,9 +177,7 @@ const Exercise: React.FC = () => {
     const tests = parser.parse(exercise.test);
     const testResults = tester.test(tests);
 
-    console.log({ testResults })
-
-    if (testResults[0].status === 'passed') {
+    if (resultStatus(testResults) === 'passed') {
       const analyzer = new Analyzer();
       // Expectations example:
       // [
@@ -167,8 +188,7 @@ const Exercise: React.FC = () => {
       //   }
       // ]
       const expectationResults = analyzer.analyze(ast, exercise.expectations || []);
-      // TODO: setExpectations(expectationResults) and show them
-      console.log({ expectationResults })
+      setExpectations(expectationResults)
     }
 
     setResults(testResults)
@@ -225,6 +245,7 @@ const Exercise: React.FC = () => {
       {results &&
         <div className="mt-8">
           <ExerciseResult reports={results} />
+          <ExpectationResult expectations={expectations || []} />
           <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResults(null) }} />
         </div>}
     </Main>
