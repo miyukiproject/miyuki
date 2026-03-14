@@ -10,7 +10,7 @@
   ],
   "type": "learning",
   "authors": "Franco Leonardo Bulgarelli, Gustavo Trucco, Mumuki Project",
-  "id_format": "%05d",
+  "id": 1,
   "private": true,
   "teacher_info": "",
   "sources": "",
