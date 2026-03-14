@@ -88,16 +88,19 @@
       "test": "describe \"cantidadRuedasBicicleta\" $ do\n  it \"es igual a 2\" $ do\n    cantidadRuedasBicicleta `shouldBe` 2\n\ndescribe \"cantidadRuedasMoto\" $ do\n  it \"es igual a cantidadRuedasBicicleta\" $ do\n    cantidadRuedasMoto `shouldBe` cantidadRuedasBicicleta\n",
       "expectations": [
         {
-          "binding": "cantidadRuedasBicicleta",
-          "inspection": "HasBinding"
+          "args": [{ "name": "cantidadRuedasBicicleta" }],
+          "inspection": "HasBinding",
+          "expected": true
         },
         {
-          "binding": "cantidadRuedasMoto",
-          "inspection": "HasBinding"
+          "args": [{ "name": "cantidadRuedasMoto" }],
+          "inspection": "HasBinding",
+          "expected": true
         },
         {
-          "binding": "cantidadRuedasMoto",
-          "inspection": "HasUsage:cantidadRuedasBicicleta"
+          "args": [{ "name": "cantidadRuedasMoto" }],
+          "inspection": "HasUsage:cantidadRuedasBicicleta",
+          "expected": true
         }
       ],
       "custom_expectations": ""

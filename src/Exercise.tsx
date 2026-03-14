@@ -11,7 +11,6 @@ import { Main } from "./Main"
 import { functional, pdep } from "./model/book"
 import { Exercise as ExerciseModel } from "./model/guide"
 import { ProgressBar } from "./ProgressBar"
-import { ProgressStatus } from "./ProgressStatus"
 import { ContentTitle } from "./Title"
 
 const interpreterConfig: InterpreterConfig = {
@@ -21,9 +20,16 @@ const interpreterConfig: InterpreterConfig = {
   "outputMode": "first"
 }
 
-const ExerciseResult: React.FC<{ report: TestReport }> = ({ report }) => {
+const resultStatus = (reports: TestReport[]) => reports.every(res => res.status === "passed")
+  ? 'passed'
+  : reports.every(res => res.status === "error")
+    ? 'error'
+    : 'failed'
+
+
+const ExerciseResult: React.FC<{ reports: TestReport[] }> = ({ reports }) => {
   const { t } = useTranslation()
-  if (report.status === "passed") {
+  if (resultStatus(reports) === "passed") {
     return (
       <div className="border-l-4 border-green-500 bg-green-50 p-4 mb-6">
         <h4 className="text-green-700 font-semibold">
@@ -33,7 +39,7 @@ const ExerciseResult: React.FC<{ report: TestReport }> = ({ report }) => {
     )
   }
 
-  if (!report.children?.length) {
+  if (resultStatus(reports) === "error") {
     return (
       <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
         <h4 className="text-red-700 font-semibold mb-2">
@@ -52,9 +58,11 @@ const ExerciseResult: React.FC<{ report: TestReport }> = ({ report }) => {
         ✖ {t("failed")}
       </h4>
       <div className="bg-white border rounded p-3 text-sm font-mono">
-        {report.children!.map(({ name, status, message }) =>
-          <p key={name}>{status === 'passed' ? '✔' : '✖'} {name} {message}</p>
-        )}
+        {reports.map(report => (
+          report.children!.map(({ name, status, message }) =>
+            <p key={name}>{status === 'passed' ? '✔' : '✖'} {name} {message}</p>
+          )
+        ))}
       </div>
     </div>
   )
@@ -127,7 +135,7 @@ const Exercise: React.FC = () => {
   const [code, setCode] = useState<string>(exercise.defaultCode ?? "")
   const [showHint, setShowHint] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false)
-  const [result, setResult] = useState<TestReport | null>(null)
+  const [results, setResults] = useState<TestReport[] | null>(null)
   const [processing, setProcessing] = useState<boolean>(false)
 
   const editorRef = useRef<any>(null)
@@ -138,13 +146,15 @@ const Exercise: React.FC = () => {
 
   const submit = () => {
     setProcessing(true)
-    setResult(null)
+    setResults(null)
 
     const parser = new YukigoHaskellParser();
     const ast = parser.parse(code);
     const tester = new Tester(ast, interpreterConfig);
     const tests = parser.parse(exercise.test);
     const testResults = tester.test(tests);
+
+    console.log({ testResults })
 
     if (testResults[0].status === 'passed') {
       const analyzer = new Analyzer();
@@ -161,18 +171,11 @@ const Exercise: React.FC = () => {
       console.log({ expectationResults })
     }
 
-    setResult(testResults[0])
+    setResults(testResults)
     setProcessing(false)
   }
 
-  const currentProgressStatus: ProgressStatus = processing
-    ? "processing"
-    : result?.status === "passed"
-      ? "passed"
-      : result?.status === "failed"
-        ? "failed"
-        : "pending"
-
+  const currentProgressStatus = resultStatus(results || [])
   progress[Number(exerciseId) - 1] = { status: currentProgressStatus, active: true }
 
   return (
@@ -219,10 +222,10 @@ const Exercise: React.FC = () => {
         </div>
       </div>
 
-      {result &&
+      {results &&
         <div className="mt-8">
-          <ExerciseResult report={result} />
-          <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResult(null) }} />
+          <ExerciseResult reports={results} />
+          <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResults(null) }} />
         </div>}
     </Main>
   )
