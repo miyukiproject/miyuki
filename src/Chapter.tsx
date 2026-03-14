@@ -7,6 +7,7 @@ import { ExercisesList } from "./ExercisesList"
 import { Main } from "./Main"
 import { ContentChildrenTitle, ContentChildTitle, ContentTitle } from "./Title"
 import { functional, pdep } from "./model/book"
+import { Description } from "./Description"
 
 const chapter = functional
 const lessons = chapter.lessons.map(url => require(`./exercises/${url}`))
@@ -25,9 +26,7 @@ const Chapter: React.FC = () => {
           })}
         </ContentTitle>
 
-        <div className="bg-white p-4 flex gap-4">
-          <Markdown rehypePlugins={[rehypeRaw]}>{chapter.description}</Markdown>
-        </div>
+        <Description className="bg-white p-4 flex gap-4">{chapter.description}</Description>
       </header>
 
       {/* Lessons */}

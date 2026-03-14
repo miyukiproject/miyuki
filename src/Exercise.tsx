@@ -11,6 +11,7 @@ import { Exercise as ExerciseModel } from "./model/guide"
 import { ProgressBar } from "./ProgressBar"
 import { ProgressStatus } from "./ProgressStatus"
 import { ContentTitle } from "./Title"
+import { Description } from "./Description"
 
 
 type ResultStatus = "success" | "error" | null
@@ -75,9 +76,7 @@ const Assignment: React.FC<{ exercise: ExerciseModel, showHint: boolean, setShow
   const { t } = useTranslation()
   return (
     <div>
-      <div className="mb-4">
-        <Markdown rehypePlugins={[rehypeRaw]}>{exercise.description}</Markdown>
-      </div>
+      <Description className="mb-4">{exercise.description}</Description>
 
       <button
         onClick={() => setShowHint(!showHint)}

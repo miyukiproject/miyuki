@@ -9,6 +9,7 @@ import { ExercisesList } from "./ExercisesList"
 import { Main } from "./Main"
 import { functional, pdep } from "./model/book"
 import { ContentChildrenTitle, ContentTitle } from "./Title"
+import { Description } from "./Description"
 
 const Lesson: React.FC = () => {
   const { t } = useTranslation()
@@ -28,10 +29,7 @@ const Lesson: React.FC = () => {
       </div>
 
       {/* Intro */}
-      <div className="prose max-w-none mb-10">
-        <Markdown rehypePlugins={[rehypeRaw]}>{lesson.description}</Markdown>
-      </div>
-
+      <Description className="prose max-w-none mb-10">{lesson.description}</Description>
 
       {/* Exercises */}
       <ContentChildrenTitle>{t("exercises")}</ContentChildrenTitle>
