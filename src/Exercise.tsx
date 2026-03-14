@@ -1,9 +1,11 @@
 import Editor, { OnMount } from "@monaco-editor/react"
 import React, { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import Markdown from "react-markdown"
 import { Link, useParams } from "react-router"
-import rehypeRaw from "rehype-raw"
+import { Tester, TestReport } from "yukigo"
+import { YukigoHaskellParser } from "yukigo-haskell-parser"
+import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext"
+import { Description } from "./Description"
 import { DeepPartial } from "./helpers/DeepPartial"
 import { Main } from "./Main"
 import { functional, pdep } from "./model/book"
@@ -11,16 +13,17 @@ import { Exercise as ExerciseModel } from "./model/guide"
 import { ProgressBar } from "./ProgressBar"
 import { ProgressStatus } from "./ProgressStatus"
 import { ContentTitle } from "./Title"
-import { Description } from "./Description"
 
+const interpreterConfig: InterpreterConfig = {
+  "lazyLoading": true,
+  "mutability": false,
+  "debug": false,
+  "outputMode": "first"
+}
 
-type ResultStatus = "success" | "error" | null
-
-const ExerciseResult: React.FC<{ status: ResultStatus }> = ({ status }) => {
+const ExerciseResult: React.FC<{ report: TestReport }> = ({ report }) => {
   const { t } = useTranslation()
-  if (!status) return null
-
-  if (status === "success") {
+  if (report.status === "passed") {
     return (
       <div className="border-l-4 border-green-500 bg-green-50 p-4 mb-6">
         <h4 className="text-green-700 font-semibold">
@@ -30,13 +33,28 @@ const ExerciseResult: React.FC<{ status: ResultStatus }> = ({ status }) => {
     )
   }
 
+  if (!report.children?.length) {
+    return (
+      <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
+        <h4 className="text-red-700 font-semibold mb-2">
+          ✖ {t("aborted")}
+        </h4>
+        <div className="bg-white border rounded p-3 text-sm font-mono">
+          {"No results :("}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
       <h4 className="text-red-700 font-semibold mb-2">
-        ✖ {t("aborted")}
+        ✖ {t("failed")}
       </h4>
       <div className="bg-white border rounded p-3 text-sm font-mono">
-        Timed out connecting to server: &ltno reason&gt
+        {report.children!.map(({ name, status, message }) =>
+          <p key={name}>{status === 'passed' ? '✔' : '✖'} {name} {message}</p>
+        )}
       </div>
     </div>
   )
@@ -109,7 +127,7 @@ const Exercise: React.FC = () => {
   const [code, setCode] = useState<string>(exercise.defaultCode ?? "")
   const [showHint, setShowHint] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false)
-  const [result, setResult] = useState<ResultStatus>(null)
+  const [result, setResult] = useState<TestReport | null>(null)
   const [processing, setProcessing] = useState<boolean>(false)
 
   const editorRef = useRef<any>(null)
@@ -122,18 +140,21 @@ const Exercise: React.FC = () => {
     setProcessing(true)
     setResult(null)
 
-    setTimeout(() => {
-      const success = Math.random() > 0.5
-      setResult(success ? "success" : "error")
-      setProcessing(false)
-    }, 1500)
+    const parser = new YukigoHaskellParser();
+    const ast = parser.parse(code);
+    const tester = new Tester(ast, interpreterConfig);
+    const tests = parser.parse(exercise.test);
+    const testResults = tester.test(tests);
+
+    setResult(testResults[0])
+    setProcessing(false)
   }
 
   const currentProgressStatus: ProgressStatus = processing
     ? "processing"
-    : result === "success"
+    : result?.status === "passed"
       ? "passed"
-      : result === "error"
+      : result?.status === "failed"
         ? "failed"
         : "pending"
 
@@ -183,10 +204,11 @@ const Exercise: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8">
-        <ExerciseResult status={result} />
-        {result && <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResult(null) }} />}
-      </div>
+      {result &&
+        <div className="mt-8">
+          <ExerciseResult report={result} />
+          <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResult(null) }} />
+        </div>}
     </Main>
   )
 }

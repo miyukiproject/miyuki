@@ -2,14 +2,12 @@
 
 import React from "react"
 import { useTranslation } from "react-i18next"
-import Markdown from "react-markdown"
 import { Link, useParams } from "react-router"
-import rehypeRaw from "rehype-raw"
+import { Description } from "./Description"
 import { ExercisesList } from "./ExercisesList"
 import { Main } from "./Main"
 import { functional, pdep } from "./model/book"
 import { ContentChildrenTitle, ContentTitle } from "./Title"
-import { Description } from "./Description"
 
 const Lesson: React.FC = () => {
   const { t } = useTranslation()
