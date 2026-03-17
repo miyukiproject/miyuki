@@ -1,0 +1,547 @@
+{
+    "id": 2,
+    "corollary": "",
+    "extra": "",
+    "beta": false,
+    "expectations": [
+        {
+            "binding": "*",
+            "inspection": "Except:HasRedundantParameter"
+        }
+    ],
+    "type": "practice",
+    "authors": "Franco Bulgarelli, Laura Mangifesta, Gustavo Trucco",
+    "private": true,
+    "teacher_info": "",
+    "sources": "",
+    "settings": {},
+    "custom_expectations": "",
+    "name": "Práctica Valores y Funciones",
+    "description": "Recién tuvimos una primera aproximación al mundo funcional: etiquetas, valores y funciones. \n\nPero ninguna introducción está completa si no practicamos un poco. ¡Allá vamos!\n",
+    "locale": "es",
+    "slug": "mumukiproject/mumuki-guia-funcional-practica-valores-y-funciones-pdep-utn",
+    "exercises": [
+        {
+            "name": "siguiente",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 201,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí una función `siguiente`, que al aplicarla con un número cualquiera me devuelve el resultado de sumar a ese número el 1.\n\n```haskell\nム siguiente 3\n4\n```\n\n",
+            "test": "describe \"siguiente\" $ do\n  it \"siguiente 1 == 2\" $ do\n    siguiente 1 `shouldBe` 2\n\n  it \"siguiente 4 == 5\" $ do\n    siguiente 4 `shouldBe` 5\n\n  it \"siguiente 100 == 101\" $ do\n    siguiente 100 `shouldBe` 101",
+            "expectations": []
+        },
+        {
+            "name": "mitad",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 202,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí una función `mitad`, que al aplicarla con un número cualquiera me devuelve el resultado de dividir a ese número por 2.\n\n```haskell\nム mitad 5\n2.5\n```\n\n",
+            "hint": "En haskell para dividir usamos el operador `/`.\n",
+            "test": "describe \"mitad\" $ do\n  it \"mitad 4 == 2\" $ do\n    mitad 4 `shouldBe` 2\n\n  it \"mitad 9 == 4.5\" $ do\n    mitad 9 `shouldBe` 4.5\n\n  it \"mitad 10 == 5\" $ do\n    mitad 10 `shouldBe` 5\n",
+            "expectations": []
+        },
+        {
+            "name": "inversa",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 203,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí una función `inversa`, que al aplicarla con un número cualquiera me devuelve el resultado de dividir a 1 por ese número.\n\n```haskell\nム inversa 4\n0.25\n\nム inversa 0.5\n2.0\n```\n\n\n",
+            "test": "describe \"inversa\" $ do\n  it \"inversa 1 == 1\" $ do\n    inversa 1 `shouldBe` 1\n\n  it \"inversa 4 == 0.25\" $ do\n    inversa 4 `shouldBe` 0.25\n\n  it \"inversa 0.5 == 2\" $ do\n    inversa 0.5 `shouldBe` 2\n",
+            "expectations": [
+                {
+                    "binding": "*",
+                    "inspection": "Except:HasRedundantParameter"
+                }
+            ]
+        },
+        {
+            "name": "esNumeroPositivo",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "teacher_info": "",
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 205,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí una función `esNumeroPositivo`, que dado un número, me dice si es mayor a cero.\n\n```haskell\nム esNumeroPositivo (-5)\nFalse\n\nム esNumeroPositivo 0.99\nTrue\n```\n",
+            "test": "describe \"esNumeroPositivo\" $ do\n  it \"2 es un numero positivo\" $ do\n    esNumeroPositivo 2 `shouldBe` True\n\t\n  it \"5 es un numero positivo\" $ do\n    esNumeroPositivo 5 `shouldBe` True\n\t \n  it \"-8.7 no es un numero positivo\" $ do\n    esNumeroPositivo (-8.7) `shouldBe` False\n\t\n  it \"3.4 es un numero positivo\" $ do\n    esNumeroPositivo 3.4 `shouldBe` True\n    \n  it \"-950 no es un numero positivo\" $ do\n    esNumeroPositivo (-950) `shouldBe` False",
+            "expectations": [
+                {
+                    "binding": "esNumeroPositivo",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "esNumeroPositivo",
+                    "inspection": "Not:HasGuards"
+                }
+            ]
+        },
+        {
+            "name": "comienzaConA",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 204,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí una función `comienzaConA` que, al aplicarla con un string, me diga si el mismo comienza con la letra 'a'.\nPor ejemplo:\n\n```haskell\nム comienzaConA \"aguja\"\nTrue\n\nム comienzaConA \"bote\"\nFalse\n```\n",
+            "hint": "- Recordá lo que hacía la función `head` :wink:.\n- Para saber si dos cosas son iguales existe el operador `==`.",
+            "test": "describe \"comienzaConA\" $ do\n  it \"comienzaConA \\\"aguja\\\" == True\" $ do\n    comienzaConA \"aguja\" `shouldBe` True\n\t\n  it \"comienzaConA \\\"cargador\\\" == False\" $ do\n    comienzaConA \"cargador\" `shouldBe` False\n",
+            "expectations": [
+                {
+                    "binding": "*",
+                    "inspection": "Except:DoesTypeTest"
+                }
+            ]
+        },
+        {
+            "name": "esMultiploDeTres",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 11,
+            "type": "problem",
+            "settings": {},
+            "description": "Definí la función `esMultiploDeTres` que dice si un número se puede dividir por 3. Por ejemplo:\n\n```haskell\nム esMultiploDeTres 9\nTrue\nム esMultiploDeTres 4\nFalse\n```\n\nAsumí que contás con la función `esMultiploDe`, que nos dice si un número es múltiplo de otro:\n\n```haskell\nム esMultiploDe 9 3\nTrue\nム esMultiploDe 4 3\nFalse\n```\n\n",
+            "extra": "esMultiploDe x y = rem x y == 0 ",
+            "test": "describe \"esMultiploDeTres\" $ do\n  it \"devuelve True dado un 3\" $ do\n    esMultiploDeTres 3 `shouldBe` True\n\n  it \"devuelve True dado un 9\" $ do\n    esMultiploDeTres 9 `shouldBe` True\n\n  it \"devuelve True dado un 90\" $ do\n    esMultiploDeTres 90 `shouldBe` True\n\n  it \"devuelve False dado un 91\" $ do\n    esMultiploDeTres 91 `shouldBe` False",
+            "expectations": [
+                {
+                    "binding": "esMultiploDeTres",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "esMultiploDeTres",
+                    "inspection": "Not:HasConditional"
+                }
+            ]
+        },
+        {
+            "name": "esMultiploDe",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 12,
+            "type": "problem",
+            "settings": {},
+            "description": "¡Y ahora nos toca a nosotros definir la función `esMultiploDe`!\n\nRecordá que `esMultiploDe` toma dos números y nos dice si el primero es múltiplo del segundo. Ejemplo:\n\n```haskell\nム esMultiploDe 12 3\nTrue -- porque si divido 12 sobre 3, el resto es cero\nム esMultiploDe 12 5\nFalse -- porque si divido 12 sobre 5, el resto no es cero (es 2)\n```\n\nAh, y para saber si un número es múltiplo de otro podemos utilizar la función `rem` nos da el resto de la división entera:\n\n```haskell\nム rem 12 3\n0\n\nム rem 12 5\n2\n```\n\n",
+            "hint": "¡Ojo! `rem` sólo nos dice el resto de dividir dos números, pero para saber si esos dos números son multiplos, tenemos que averiguar si ese resto **es cero**.",
+            "test": "describe \"esMultiploDe\" $ do\n  it \"devuelve True dado un 3 y un 3\" $ do\n    (3 `esMultiploDe` 3) `shouldBe` True\n\n  it \"devuelve True dado un 3 y un 1\" $ do\n    (3 `esMultiploDe` 1) `shouldBe` True\n\n  it \"devuelve True dado un 10 y un 1\" $ do\n    (10 `esMultiploDe` 1) `shouldBe` True\n\n  it \"devuelve True dado un 10 y un 2\" $ do\n    (10 `esMultiploDe` 2) `shouldBe` True\n\n  it \"devuelve True dado un 20 y un 5\" $ do\n    (20 `esMultiploDe` 5) `shouldBe` True\n\n  it \"devuelve False dado un 3 y un 2\" $ do\n    (3 `esMultiploDe` 2) `shouldBe` False\n\n  it \"devuelve False dado un 30 y un 40\" $ do\n    (30 `esMultiploDe` 40) `shouldBe` False\n\n  it \"devuelve False dado un 8 y un 7\" $ do\n    (8 `esMultiploDe` 7) `shouldBe` False\n",
+            "expectations": [
+                {
+                    "binding": "esMultiploDe",
+                    "inspection": "HasBinding"
+                }
+            ]
+        },
+        {
+            "name": "esMasLargoQue",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 14,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí la función `esMasLargoQue`, que recibe un número y un string, y me dice si el string tiene más letras que el número.\n\n```haskell\nム esMasLargoQue 5 \"computadora\"\nTrue\n\nム esMasLargoQue 5 \"gato\"\nFalse\n```\n\n",
+            "test": "describe \"esMasLargoQue\" $ do\n  it \"devuelve True dado 5 y \\\"computadora\\\"\" $ do\n    esMasLargoQue 5 \"computadora\" `shouldBe` True\n\n  it \"devuelve False dado 5 y \\\"gato\\\"\" $ do\n    esMasLargoQue 5 \"gato\" `shouldBe` False\n    \n",
+            "expectations": [
+                {
+                    "binding": "esMasLargoQue",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Except:HasRedundantParameter"
+                }
+            ]
+        },
+        {
+            "name": "Hagamos un paréntesis",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 206,
+            "type": "problem",
+            "settings": {},
+            "default_content": "esParElMayor numero otroNumero = esPar max numero otroNumero\n\nesSaludo palabra = palabra == \"hola\" || palabra == \"chau\"\n\nlaInicialEstaIncluida unaPalabra otraPalabra = elem head unaPalabra otraPalabra\n",
+            "description": "Como ya sabemos, en haskell no es necesario usar paréntesis para pasarle parámetros a una función. Pero ojo, esto no significa que no haya que usarlos nunca. Entonces... ¿Cuándo sí y cuándo no? Te lo enseñamos en este video.\n\n\u003ciframe width=\"854\" height=\"480\" src=\"https://www.youtube.com/embed/WV1fPlFAw8M\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen\u003e\u003c/iframe\u003e\n\nVamos a ver si se entendió con un ejercicio.\n\n\u003e Mira las funciones que están definidas en el editor y agrega los paréntesis que consideres necesarios.\n",
+            "extra": "esPar = even",
+            "hint": "¿Se entendió lo que hacen las funciones?\n\n* `esParElMayor` nos dice si el más grande entre dos números es par;\n* `esSaludo` nos dice si un string es \"hola\" o \"chau\"\";\n* `laInicialEstaIncluida` me dice si la inicial de un string está incluida en otro string.\n",
+            "test": "describe \"esParElMayor\" $ do\n  it \"da True entre 8 y 5\" $ do \n    esParElMayor 8 5 `shouldBe` True\n  it \"da False entre 8 y 11\" $ do \n    esParElMayor 8 11 `shouldBe` False\n    \ndescribe \"esSaludo\" $ do\n  it \"da True con \\\"hola\\\"\" $ do \n    esSaludo \"hola\" `shouldBe` True\n  it \"da False con \\\"batman\\\"\" $ do \n    esSaludo \"batman\" `shouldBe` False\n    \ndescribe \"laInicialEstaIncluida\" $ do\n  it \"da True con \\\"gustavo\\\" y \\\"agua\\\"\" $ do \n    laInicialEstaIncluida \"gustavo\" \"agua\" `shouldBe` True\n  it \"da False con \\\"batman\\\" y \\\"argentina\\\" \" $ do \n    laInicialEstaIncluida \"batman\" \"argentina\" `shouldBe` False",
+            "expectations": [
+                {
+                    "binding": "*",
+                    "inspection": "Except:HasRedundantParameter"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Except:DoesTypeTest"
+                }
+            ]
+        },
+        {
+            "name": "esBisiesto",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": true,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 15,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Definí la función `esBisiesto` que indica si un año tiene 366 días.\n\n```haskell\nム esBisiesto 2000\nTrue\n```\n\nUn año es bisiesto si:\n\n* es múltiplo de 400, o bien\n* es múltiplo de 4 pero no de 100\n\nTené en cuenta que existe la función `esMultiploDe`, que definimos anteriormente y que dice si el primer argumento es multiplo del segundo. \n",
+            "extra": "esMultiploDe x y = rem x y == 0\n",
+            "hint": "¡Aha! ¿Y que funciones tenemos para operar a los booleanos? \n\nVeamos: existe la funcion `not` que recibe un booleano y lo devuelve negado:\n\n```haskell\n\u003e not True\nFalse\n\n\u003e not (esNumeroPositivo 3)\nFalse\n```\n\nAdemás, los operadores lógicos son los que ya vimos en lecciones anteriores:\n\n* la conjunción (_and_) se escribe `\u0026\u0026`, por ejemplo `rapido \u0026\u0026 barato`\n* la disyunción (_or_) se escribe `||`, por ejemplo `lluvioso || soleado` \n\n",
+            "test": "let esMultiploDe x y = mod x y == 0\n\ndescribe \"esBisiesto\" $ do\n  it \"1004 es bisiesto\" $ do\n    esBisiesto 1004 `shouldBe` True\n\n  it \"8 es bisiesto\" $ do\n    esBisiesto 8 `shouldBe` True\n\n  it \"1996 es bisiesto\" $ do\n    esBisiesto 1996 `shouldBe` True\n    \n  it \"2000 es bisiesto\" $ do\n    esBisiesto 2000 `shouldBe` True\n    \n  it \"800 es bisiesto\" $ do\n    esBisiesto 800 `shouldBe` True\n\n  it \"100 no es bisiesto\" $ do\n    esBisiesto 100 `shouldBe` False\n\n  it \"2022 no es bisiesto\" $ do\n    esBisiesto 2022 `shouldBe` False\n\n  it \"2021 no es bisiesto\" $ do\n    esBisiesto 2021 `shouldBe` False\n\n  it \"2014 no es bisiesto\" $ do\n    esBisiesto 2014 `shouldBe` False\n\n  it \"200 no es bisiesto\" $ do\n    esBisiesto 200 `shouldBe` False\n\n\n",
+            "expectations": [
+                {
+                    "binding": "esBisiesto",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "esBisiesto",
+                    "inspection": "HasUsage:esMultiploDe"
+                },
+                {
+                    "binding": "esMultiploDe",
+                    "inspection": "Not:HasBinding"
+                },
+                {
+                    "binding": "esBisiesto",
+                    "inspection": "Not:HasConditional"
+                },
+                {
+                    "binding": "esBisiesto",
+                    "inspection": "Not:HasUsage:mod"
+                },
+                {
+                    "binding": "esBisiesto",
+                    "inspection": "Not:HasUsage:rem"
+                }
+            ]
+        },
+        {
+            "name": "deCelsiusAFarenheit",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 16,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "La temperatura se mide en _grados_, pero en algunos países se usan grados _\"diferentes\"_. \n\nEn Argentina, Uruguay y Chile se usan _grados Celsius_ (abreviado _°C_), pero en en Estados Unidos se utilizan _grados Farenheit_ (_°F_). Por ejemplo 10°C son 50°F. \n\n¿Y cómo hacemos para convertir grados Celsius en grados Farenheit? ¡Usando la siguiente fórmula!\n\n```\nGradosFarenheit = GradosCelsius × 1.8 + 32\n```\n\n\u003e Sabiendo ésto, definí la función `deCelsiusAFarenheit` que, a partir de una cantidad de grados en escala Celsius, devuelve el equivalente en escala Fahrenheit.\n\u003e \n\u003e ```haskell\n\u003e ム deCelsiusAFarenheit 10\n\u003e 50  -- porque 10°C son 50°F \n\u003e ム deCelsiusAFarenheit 0\n\u003e 32 -- porque 0°C son 32°F \n\u003e ```\n\n",
+            "test": "describe \"deCelsiusAFarenheit\" $ do\n  it \"100 °C -\u003e 212 °F\" $ do\n    deCelsiusAFarenheit 100 `shouldBe` 212\n\n  it \"40 °C -\u003e 104 °F\" $ do\n    deCelsiusAFarenheit 40 `shouldBe` 104\n\n  it \"10 °C -\u003e 50 °F\" $ do\n    deCelsiusAFarenheit 10 `shouldBe` 50\n\n  it \"30 °C -\u003e 86 °F\" $ do\n    deCelsiusAFarenheit 30 `shouldBe` 86\n",
+            "expectations": []
+        },
+        {
+            "name": "deFarenheitACelsius",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 17,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Ahora hagamos el proceso inverso: aprendamos a convertir una temperatura en grados Farenheit a grados Celsius. La fórmula es la siguiente: \n\n```\nGradosCelsius = (GradosFarenheit - 32) / 1.8\n```\n\n\u003e Definí la función `deFarenheitACelsius` que, a partir de una cantidad de grados en escala Fahrenheit, devuelve el equivalente en escala Celsius.\n\u003e \n\u003e ```haskell\n\u003e ム deFarenheitACelsius 32\n\u003e 0 --- porque 32°F son 0°C\n\u003e ム deFarenheitACelsius 50\n\u003e 10 --- porque 50°F son 10°C\n\u003e ```\n\n",
+            "test": "describe \"deFarenheitACelsius\" $ do\n  it \"212 °F -\u003e 100 °C\" $ do\n    deFarenheitACelsius 212 `shouldBe` 100\n\n  it \"104 °F -\u003e 40 °C\" $ do\n    deFarenheitACelsius 104 `shouldBe` 40\n\n  it \"50 °F -\u003e 10 °C\" $ do\n    deFarenheitACelsius 50 `shouldBe` 10\n\n  it \"86 °F -\u003e 30 °C\" $ do\n    deFarenheitACelsius 86 `shouldBe` 30\n",
+            "expectations": []
+        },
+        {
+            "name": "¿Hace frio?",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": true,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 18,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "¡Se vino el frío! :snowflake: Y necesitamos programar las siguientes funciones: \n\n* `haceFrioCelsius` que nos diga si hace menos de 8 grados Celsius\n* `haceFrioFarenheit` que también nos diga si hace frío, pero que tome una temperatura expresada en grados Farenheit. \n\nEjemplo:\n\n```haskell\nム haceFrioCelsius 10\nFalse -- porque son más de 8°C\nム haceFrioCelsius 0 \nTrue -- porque son menos de 8°C\nム haceFrioFarenheit 50 -- recordá que 50°F son 10°C\nFalse\nム haceFrioFarenheit 32 -- recordá que 32°F son 0°C\nTrue\n```\n\n\u003e Definí las funciones `haceFrioCelsius` y `haceFrioFarenheit`, que nos digan si una temperatura (en Celsius y Farenheit, respectivamente) es fría.  \n\u003e\n\u003e Como desafío adicional, definí `haceFrioFarenheit` reutilizando `haceFrioCelsius` y **usando composición**. Asúmí que ya tenemos `deFarenheitACelsius`.",
+            "extra": "deFarenheitACelsius temperatura = (temperatura - 32)  * 5 / 9\n",
+            "hint": "Para usar composición, recordá que tenés que tener dos funciones, y cada una debe tomar un único parámetro. Te dejamos un ejemplo para refrescar la memoria: \n\n```haskell\ndobleDelSiguiente = doble . siguiente\n```",
+            "test": "describe \"haceFrioFarenheit\" $ do\n  it \"212 °F no es frio\" $ do\n    haceFrioFarenheit 212 `shouldBe` False\n\n  it \"104 °F no es frio\" $ do\n    haceFrioFarenheit 104 `shouldBe` False\n\n  it \"50 °F no es frio\" $ do\n    haceFrioFarenheit 50 `shouldBe` False\n\n  it \"5 °F es frio\" $ do\n    haceFrioFarenheit 5 `shouldBe` True\n",
+            "expectations": [
+                {
+                    "binding": "haceFrioFarenheit",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "haceFrioFarenheit",
+                    "inspection": "HasUsage:deFarenheitACelsius"
+                },
+                {
+                    "binding": "deFarenheitACelsius",
+                    "inspection": "Not:HasBinding"
+                },
+                {
+                    "binding": "haceFrioFarenheit",
+                    "inspection": "HasComposition"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Declares:haceFrioCelsius"
+                },
+                {
+                    "binding": "haceFrioFarenheit",
+                    "inspection": "Uses:haceFrioCelsius"
+                }
+            ]
+        },
+        {
+            "name": "Dispersión",
+            "locale": "es",
+            "layout": "input_right",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 110,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Trabajamos con tres enteros que representan el nivel de un río en tres días consecutivos :calendar:. Por ejemplo: medimos los días 1, 2 y 3, y las mediciones son: 22 cm, 283 cm, y 294 cm.\n\nUsando estas mediciones nos gustaría saber tres cosas: \n\n* `maximoEntreTres`: toma tres mediciones y nos da la más alta;\n* `minimoEntreTres`: toma tres mediciones y nos da la mas baja;\n*  `dispersion`: toma los tres mediciones y devuelve la diferencia entre la más alta y la más baja. Ejemplo:\n\n```haskell\nム maximoEntreTres 22 283 294\n294\nム minimoEntreTres 22 283 294\n22\nム dispersion 22 283 294\n272 --Porque 294 menos 22 es 272.\n```\n\n\u003e ¡Desarrollá estas tres funciones! Y no repitas código: reutilizá `maximoEntreTres` y `minimoEntreTres` en la definición de `dispersion` :sunglasses:",
+            "hint": "Hay dos funciones que nos pueden ayudar acá: `max` y `min`, que nos dan el máximo y el mínimo entre dos números, respectivamente. Por ejemplo: \n\n```haskell\nム max 4 10\n10\nム max 12 9\n12\nム min 4 10\n4\nム min 12 9\n9\n\nム ((min 8).(max 2)) 5\n5 --Porque el máximo entre 2 y 5 es 5. Y el mínimo entre 5 y 8 es 5.\n```\n\n",
+            "test": "describe \"dispersion\" $ do\n  it \"dispersion 1 1 1 == 0\" $ do\n    dispersion 1 1 1 `shouldBe` 0\n\n  it \"dispersion 1 1 10 == 9\" $ do\n    dispersion 1 1 10 `shouldBe` 9\n\n  it \"dispersion 11 15 4 == 11\" $ do\n    dispersion 11 15 4 `shouldBe` 11\n\n  it \"dispersion 101 1 203 == 202\" $ do\n    dispersion 101 1 203 `shouldBe` 202\n\n",
+            "expectations": [
+                {
+                    "binding": "dispersion",
+                    "inspection": "Not:HasGuards"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Except:HasRedundantParameter"
+                },
+                {
+                    "binding": "dispersion",
+                    "inspection": "Uses:maximoEntreTres"
+                },
+                {
+                    "binding": "dispersion",
+                    "inspection": "Uses:minimoEntreTres"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Declares:minimoEntreTres"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Declares:maximoEntreTres"
+                }
+            ]
+        },
+        {
+            "name": "Pasan los días",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 113,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "Siguiendo con el problema anterior, ahora que contamos con la  función `dispersion`, necesitamos definir las siguientes funciones, que reciben los valores de los tres días, y nos responden si son días parejos, locos o normales:\n\n* `diasParejos`: son días parejos si la dispersión es chica (menos de 30 cm)\n* `diasLocos`: son días locos si la dispersión es grande (más de un metro)\n* `diasNormales`, son días normales si no son ni parejos ni locos.\n\nEjemplo:\n\n```haskell\nム diasParejos 110 98 100\nTrue\n```\n\n```haskell\nム diasNormales 1 200 500\nFalse\n```\n\n\u003e Definí `diasNormales`, `diasParejos` y `diasLocos`, Asumí que `dispersion` ya está definida. ",
+            "extra": "dispersion x y z = max3 x y z -  min3 x y z\n  where max3 x y = max x.max y\n        min3 x y = min x.min y\n\n",
+            "hint": "Algunas ayuditas: \n\n1. Las funciones **deben** retornar un booleano (`True`/`False`). **No deben** retornar un string (\"es loco\"/\"no es loco\")\n1. Definí una función para cada problema diferente: `diasNormales`, `diasLocos`, etc\n1. Definí `diasNormales` usando las otras dos, no vuelvas a hacer las cuentas \n",
+            "test": "describe \"dias\" $ do\n  it \"110, 1 y 203 son dias locos\" $ do\n    diasLocos 110 1 203  `shouldBe` True\n\n  it \"110, 98 y 100 son dias parejos\" $ do\n    diasParejos 110 98 100  `shouldBe` True\n\n  it \"10, 20 y 60 son dias normales\" $ do\n    diasNormales 10 20 60  `shouldBe` True\n\n  it \"1, 200 y 500 NO son dias normales\" $ do\n    diasNormales 1 200 500  `shouldBe` False\n\n  it \"110, 98 y 100 NO son dias locos\" $ do\n    diasLocos 110 98 100  `shouldBe` False\n\n  it \"10, 20 y 60 NO son dias locos\" $ do\n    diasLocos 10 20 60  `shouldBe` False\n\n  it \"10, 41 y 4 NO son dias parejos\" $ do\n    diasParejos 10 41 50  `shouldBe` False\n\n  it \"110, 1 y 203 NO son dias parejos\" $ do\n    diasParejos 110 1 203  `shouldBe` False\n\n  it \"10, 20 y 60 NO son dias parejos\" $ do\n    diasParejos 10 20 60  `shouldBe` False\n\n  it \"10, 10 y 100 son dias normales\" $ do\n    diasNormales 10 10 100  `shouldBe` True\n\n  it \"1, 2 y 1 NO son dias normales\" $ do\n    diasNormales 1 2 1  `shouldBe` False\n\n",
+            "expectations": [
+                {
+                    "binding": "dispersion",
+                    "inspection": "Not:HasBinding"
+                },
+                {
+                    "binding": "diasParejos",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "diasNormales",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "diasLocos",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "diasLocos",
+                    "inspection": "HasUsage:dispersion"
+                },
+                {
+                    "binding": "diasParejos",
+                    "inspection": "HasUsage:dispersion"
+                },
+                {
+                    "binding": "diasNormales",
+                    "inspection": "HasUsage:diasParejos"
+                },
+                {
+                    "binding": "diasNormales",
+                    "inspection": "HasUsage:diasLocos"
+                }
+            ]
+        },
+        {
+            "name": "Pinos",
+            "locale": "es",
+            "layout": "input_bottom",
+            "tag_list": [],
+            "extra_visible": false,
+            "manual_evaluation": false,
+            "editor": "code",
+            "assistance_rules": [],
+            "randomizations": {},
+            "choices": [],
+            "progressive_expectations": false,
+            "id": 111,
+            "type": "problem",
+            "settings": {},
+            "default_content": "",
+            "description": "En una plantación de pinos, de cada árbol se conoce la altura expresada en **metros**. El peso de un pino se puede calcular a partir de la altura así:\n\n* 3 kg por cada centímetro hasta 3 metros,\n* 2 kg por cada centímetro arriba de los 3 metros.\n\n\u003cimg src=\"https://raw.githubusercontent.com/MumukiProject/mumuki-guia-funcional-practica-valores-y-funciones/master/images/pino.png\" alt=\"funcional-01_1526394936041.png\" width=\"auto\" height=\"auto\"\u003e\n\nPor ejemplo: \n\n* 2 metros pesan 600 kg, porque 200 * 3 = 600\n* 5 metros pesan 1300 kg, porque los primeros 3 metros pesan 900 kg y los siguientes 2 pesan los 400 restantes.\n\n\u003cimg src=\"https://raw.githubusercontent.com/MumukiProject/mumuki-guia-funcional-practica-valores-y-funciones/master/images/pinos.png\" alt=\"funcional-01_1526394936041.png\" width=\"auto\" height=\"auto\"\u003e\n\nLos pinos se usan para llevarlos a una fábrica de muebles, a la que le sirven árboles de entre 400 y 1000 kilos, un pino fuera de este rango no le sirve a la fábrica.\n\n\u003e * Definí la función `pesoPino`, recibe la altura de un pino en metros y devuelve su peso.\n\u003e * Definí la función `esPesoUtil`, recibe un peso en kg y  responde si un pino de ese peso le sirve a la fábrica\n\u003e * Definí la función `sirvePino`, recibe la altura de un pino y responde si un pino de ese peso le sirve a la fábrica.\n\u003e \n\u003e Como condimiento: definí `sirvePino` **usando composición**\n",
+            "hint": "¡Acordate de que existen las funciones `min` y `max`! \n\nAmbas te pueden servir :sunglasses:.",
+            "test": "describe \"pinos\" $ do\n  describe \"pesoPino\" $ do\n    it \"un pino de 2 metros pesa 600 kg\" $ do\n      pesoPino 2  `shouldBe` 600\n\n    it \"un pino de 5 metros pesa 1300 kg\" $ do\n      pesoPino 5  `shouldBe` 1300\n\n  describe \"esPesoUtil\" $ do\n    it \"un pino de 500 kg es útil\" $ do\n      esPesoUtil 500 `shouldBe` True\n\n    it \"un pino de 1500 kg NO es útil\" $ do\n      esPesoUtil 1500 `shouldBe` False\n\n    it \"un pino de 150 kg NO es útil\" $ do\n      esPesoUtil 150 `shouldBe` False\n\n  describe \"sirvePino\" $ do\n    it \"un pino de 2 metros es útil\" $ do\n      sirvePino 2 `shouldBe` True\n\n    it \"un pino de 5 metros NO es útil\" $ do\n      sirvePino 5 `shouldBe` False\n\n    it \"un pino de 1 metro NO es útil\" $ do\n      sirvePino 1 `shouldBe` False\n\n",
+            "expectations": [
+                {
+                    "binding": "pesoPino",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "esPesoUtil",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "sirvePino",
+                    "inspection": "HasBinding"
+                },
+                {
+                    "binding": "sirvePino",
+                    "inspection": "HasComposition"
+                },
+                {
+                    "binding": "pesoPino",
+                    "inspection": "Not:HasConditional"
+                },
+                {
+                    "binding": "sirvePino",
+                    "inspection": "Not:HasConditional"
+                },
+                {
+                    "binding": "*",
+                    "inspection": "Except:HasRedundantParameter"
+                }
+            ]
+        }
+    ],
+    "language": "haskell"
+}

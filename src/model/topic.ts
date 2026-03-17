@@ -4,9 +4,9 @@ import { Guide } from "./guide"
 export class Topic extends Content {
   // TODO
   public imageUrl: string = ""
-  public lessons: Lesson[] = []
+  public lessons: string[] = []
 
-  firstLesson(): Lesson | undefined {
+  firstLesson(): string | undefined {
     return this.lessons[0]
   }
 }
