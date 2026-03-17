@@ -8,13 +8,12 @@ https://user-images.githubusercontent.com/677436/230702139-114d099f-8ab7-4d71-be
 
 ## About
 
-This is a fork of mumuki-laboratory that:
+This is a re-write of mumuki-laboratory that:
 
-  * Freezes dependencies versions - miyuki is an [app, not an engine](https://guides.rubyonrails.org/engines.html)
   * Removes a lot of boilerplate and dark features
-  * Updates ruby and rails to 3.2 and 7, respectively
+  * Moved from ruby to typescript
   * Makes incognito mode work - current implementation had a lot of bugs and missing parts
-  * Uses `Sqlite3` instead of `PostgreSQL`
+  * Required no server-client database - just local storage!
   * Makes deployment easier
   * [Provides a desktop installer](./packager/README.md)
 
