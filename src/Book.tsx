@@ -68,7 +68,7 @@ const Book: React.FC = () => {
       </div>
 
       {/* Chapters */}
-      <section>
+      <section className="max-w-4xl mx-auto w-full">
         <ContentChildTitle>{t("chapters")}</ContentChildTitle>
         <div className="space-y-8">
           {chapters.map((chapter) => {

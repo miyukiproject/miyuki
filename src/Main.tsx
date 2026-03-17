@@ -1,4 +1,5 @@
 import { Breadcrumbs, BreadcrumbsProps } from "./Breadcrumbs";
+import Footer from "./Footer";
 
 export function Main({
   narrow,
@@ -14,6 +15,7 @@ export function Main({
       <div className={`mx-auto max-w-${narrow ? 4 : 6}xl`}>
         {children}
       </div>
+      {!fullscreen && <Footer />}
     </main>
   )
 }
