@@ -1,11 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { Topic } from "./model/topic";
-import { Breadcrumbs } from "./Breadcrumbs";
-import { Book as BookModel } from "./model/book";
 import { DeepPartial } from "./helpers/DeepPartial";
 import { Main } from "./Main";
-import { useTranslation } from "react-i18next";
+import { Book as BookModel } from "./model/book";
+import { Topic } from "./model/topic";
 import { ContentChildrenTitle, ContentChildTitle, ContentTitle } from "./Title";
 
 const book: DeepPartial<BookModel> = {

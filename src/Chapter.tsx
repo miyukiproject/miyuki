@@ -1,13 +1,11 @@
 import React from "react"
 import { useTranslation } from 'react-i18next'
-import Markdown from 'react-markdown'
 import { Link } from "react-router"
-import rehypeRaw from 'rehype-raw'
+import { Description } from "./Description"
 import { ExercisesList } from "./ExercisesList"
 import { Main } from "./Main"
 import { ContentChildrenTitle, ContentChildTitle, ContentTitle } from "./Title"
 import { functional, pdep } from "./model/book"
-import { Description } from "./Description"
 
 const chapter = functional
 const lessons = chapter.lessons.map(url => require(`./exercises/${url}`))

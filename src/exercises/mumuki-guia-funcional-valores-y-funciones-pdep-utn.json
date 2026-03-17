@@ -60,8 +60,10 @@
       "test": "describe \"cantidadDiasEnero\" $ do\n  it \"es igual a 31\" $ do\n    cantidadDiasEnero `shouldBe` 31\n",
       "expectations": [
         {
+          "args": [],
           "binding": "cantidadDiasEnero",
-          "inspection": "HasBinding"
+          "inspection": "HasBinding",
+          "expected": true
         }
       ]
     },
@@ -88,15 +90,21 @@
       "expectations": [
         {
           "binding": "cantidadRuedasBicicleta",
-          "inspection": "HasBinding"
+          "inspection": "HasBinding",
+          "args": [],
+          "expected": true
         },
         {
           "binding": "cantidadRuedasMoto",
-          "inspection": "HasBinding"
+          "inspection": "HasBinding",
+          "args": [],
+          "expected": true
         },
         {
           "binding": "cantidadRuedasMoto",
-          "inspection": "HasUsage:cantidadRuedasBicicleta"
+          "inspection": "HasUsage",
+          "args": ["cantidadRuedasBicicleta"],
+          "expected": true
         }
       ],
       "custom_expectations": ""
