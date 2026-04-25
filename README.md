@@ -44,7 +44,7 @@ npm install
 ## Start
 
 ```
-npm start
+npm run dev
 ```
 
 ## Architecture
