@@ -1,0 +1,27 @@
+{
+    "id": 1,
+    "name": "Programación Funcional",
+    "locale": "es",
+    "description": "\u003cimg src=\"https://mumuki.io/static/for_content/capitulo3-01.svg\" alt=\"\" width=\"auto\" height=\"auto\" style=\"float: left; margin: 0 15px\"\u003eEl paradigma funcional es de los más **antiguos**, pero también de los más **simples** y **poderosos**. Si querés aprender _a dominar el mundo con nada_, utilizando el lenguaje [Haskell](https://www.haskell.org/), seguí por acá.",
+    "slug": "mumukiproject/mumuki-tema-introduccion-a-la-programacion-funcional-pdep-utn",
+    "appendix": "## Recursos útiles\n\nEn internet vas a encontrar muchos libros, sitios y tutoriales para aprender sobre programación funcional y Haskell. Si querés complementar lo que ves acá, te recomendamos los siguientes: \n\n### Aprende Haskell por el Bien de Todos\n\nSe trata de un gran libro, muy completo y claro (¡y con muchas ilustraciones!), que te enseña las bases de Haskell y funcional desde cero. Se encuentra [acá](http://aprendehaskell.es/main.html). \n\n:warning: ¡Ojo! El libro también es bastante extenso. Los contenidos de Mumuki están totalmente cubiertos por sus primeras 6 lecciones: \n\n1. [Introduccion](http://aprendehaskell.es/content/Introduccion.html)\n2. [Empezando](http://aprendehaskell.es/content/Empezando.html)\n3. [Tipos](http://aprendehaskell.es/content/Tipos.html)\n4. [Funciones](http://aprendehaskell.es/content/Funciones.html)\n5. [Recursion](http://aprendehaskell.es/content/Recursion.html)\n6. [OrdenSuperior](http://aprendehaskell.es/content/OrdenSuperior.html)\n\n### Haskell en Wikibooks\n\nWikipedia (o mas precisamente, Wikibooks) tiene algunos tutoriales de Haskell, que podés [encontrar acá](https://es.wikibooks.org/wiki/Haskell). No están tan ordenados como _Aprende Haskell por el Bien de Todos_, pero son un buen material complementario y de referencia. \n\n### Try Haskell\n\n_Try Haskell_ es un intérprete interactivo un poco más poderoso que el de Mumuki, que te permite probar código Haskell fuera de los ejercicios. También es un tutorial interactivo, pero lo malo es que está sólo en inglés :sad:. El link [está acá](https://tryhaskell.org)\n\n\n### Instalación de Haskell\n\nSi querés probar Haskell en tu computadora (¡excelente idea!), podés [bajarlo de acá](https://haskell.org/platform/download).\n\n:warning: La página de descargas está en inglés y tiene varias opciones. Si tu sistema operativo es Microsoft Windows en una versión reciente, te dejamos el link directamente [acá](https://haskell.org/platform/download/8.4.2/HaskellPlatform-8.4.2-full-x86_64-setup.exe).\n\n\n",
+    "lessons": [
+        "mumuki-guia-funcional-valores-y-funciones-pdep-utn",
+        "mumuki-guia-funcional-practica-valores-y-funciones-pdep-utn",
+        "mumuki-guia-funcional-intoduccion-tipos-de-dato-pdep-utn",
+        "mumuki-guia-funcional-practica-introduccion-tipos-de-dato-pdep-utn",
+        "mumuki-guia-funcional-aplicacion-parcial-y-orden-superior-pdep-utn",
+        "mumuki-guia-funcional-practica-aplicacion-parcial-y-orden-superior-pdep-utn",
+        "mumuki-guia-funcional-funciones-partidas-pattern-matching-tuplas-pdep-utn",
+        "mumuki-guia-funcional-practica-funciones-partidas-pdep-utn",
+        "mumuki-guia-funcional-listas-pdep-utn",
+        "mumuki-guia-funcional-practica-listas-pdep-utn",
+        "mumuki-guia-funcional-inferencia-de-tipos-pdep-utn",
+        "mumuki-guia-funcional-practica-fold-concatmap-pdep-utn",
+        "mumuki-guia-funcional-practica-expresiones-lambda-pdep-utn",
+        "mumuki-guia-funcional-modelado-pdep-utn",
+        "mumuki-guia-funcional-practica-evaluacion-diferida-pdep-utn",
+        "mumuki-guia-funcional-recursividad-pdep-utn",
+        "mumuki-guia-funcional-practica-recursividad-pdep-utn"
+    ]
+}

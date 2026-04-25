@@ -1,49 +1,35 @@
-import React, { useState, useRef } from "react"
 import Editor, { OnMount } from "@monaco-editor/react"
-import { ProgressStatus } from "./ProgressStatus"
-import { ProgressBar } from "./ProgressBar"
-import { Topic } from "./model/topic"
-import { Book } from "./model/book"
-import { Guide, Exercise as ExerciseModel } from "./model/guide"
+import React, { useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { Link, useParams } from "react-router"
+import { AnalysisResult, Analyzer, Tester, TestReport } from "yukigo"
+import { YukigoHaskellParser } from "yukigo-haskell-parser"
+import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext"
+import { Description } from "./Description"
 import { DeepPartial } from "./helpers/DeepPartial"
 import { Main } from "./Main"
-import { useTranslation } from "react-i18next"
-import { Problem } from "./model/exercises"
+import { functional, pdep } from "./model/book"
+import { Exercise as ExerciseModel } from "./model/guide"
+import { ProgressBar } from "./ProgressBar"
 import { ContentTitle } from "./Title"
 
-// TODO extract
-const book: DeepPartial<Book> = {
-  name: "PdeP"
+const interpreterConfig: InterpreterConfig = {
+  "lazyLoading": true,
+  "mutability": false,
+  "debug": false,
+  "outputMode": "first"
 }
 
-const chapter: DeepPartial<Topic> = {
-  name: "Programación Funcional"
-}
-
-const lesson: DeepPartial<Guide> = {
-  name: "Valores y Funciones",
-  language: { name: "Haskell" }
-}
-
-const exercise: DeepPartial<Problem> = {
-  name: "Múltiples parámetros",
-  descriptionHtml: "¿Te imaginás cómo se puede escribir la función <code>areaRectangulo</code> que calcule el área de un rectángulo?",
-  hint: "El área de un rectángulo se calcula multiplicando base por altura.",
-  defaultCode: "areaRectangulo lado1 lado2 = lado1 * lado2"
-}
-
-const nextExercise: DeepPartial<ExerciseModel> = {
-  name: "Combinando funciones",
-}
-
-type ResultStatus = "success" | "error" | null
+const resultStatus = (reports: TestReport[]) => reports.every(res => res.status === "passed")
+  ? 'passed'
+  : reports.every(res => res.status === "error")
+    ? 'error'
+    : 'failed'
 
 
-const ExerciseResult: React.FC<{ status: ResultStatus }> = ({ status }) => {
+const ExerciseResult: React.FC<{ reports: TestReport[] }> = ({ reports }) => {
   const { t } = useTranslation()
-  if (!status) return null
-
-  if (status === "success") {
+  if (resultStatus(reports) === "passed") {
     return (
       <div className="border-l-4 border-green-500 bg-green-50 p-4 mb-6">
         <h4 className="text-green-700 font-semibold">
@@ -53,17 +39,56 @@ const ExerciseResult: React.FC<{ status: ResultStatus }> = ({ status }) => {
     )
   }
 
+  if (resultStatus(reports) === "error") {
+    return (
+      <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
+        <h4 className="text-red-700 font-semibold mb-2">
+          ✖ {t("aborted")}
+        </h4>
+        <div className="bg-white border rounded p-3 text-sm font-mono">
+          {"No results :("}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
       <h4 className="text-red-700 font-semibold mb-2">
-        ✖ {t("aborted")}
+        ✖ {t("failed")}
       </h4>
       <div className="bg-white border rounded p-3 text-sm font-mono">
-        Timed out connecting to server: &ltno reason&gt
+        {reports.map(report => (
+          report.children!.map(({ name, status, message }) =>
+            <p key={name}>{status === 'passed' ? '✔' : '✖'} {name} {message}</p>
+          )
+        ))}
       </div>
     </div>
   )
 }
+
+const expectationsOk = (expectations: AnalysisResult[]) => expectations.every(res => res.passed)
+
+const ExpectationResult: React.FC<{ expectations: AnalysisResult[] }> = ({ expectations }) => {
+  const { t } = useTranslation()
+  if (expectationsOk(expectations)) return <></>
+
+
+  return (
+    <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
+      <h4 className="text-red-700 font-semibold mb-2">
+        ✖ {t("failedExpectations")}
+      </h4>
+      <div className="bg-white border rounded p-3 text-sm font-mono">
+        {expectations.map(({ rule: { inspection, args, binding }, passed, error }, index) => (
+          <p key={index}>{passed ? '✔' : '✖'} {binding} {inspection} {args} {error}</p>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 
 const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
   onClick,
@@ -80,27 +105,26 @@ const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
 )
 
 // TODO next should be generic, not just exercise
-function NextButton({ nextExercise }: { nextExercise: DeepPartial<ExerciseModel> }) {
+function NextButton({ nextExercise, onClick }: { nextExercise: DeepPartial<ExerciseModel>, onClick?: () => void }) {
   const { t } = useTranslation()
+  const { lessonId, exerciseId } = useParams()
 
   return (
-    <a
-      href="#"
+    <Link
+      to={`/lessons/${lessonId}/exercises/${Number(exerciseId) + 1}`}
       className="block w-full mt-4 bg-pink-400 hover:bg-pink-500 text-white py-3 rounded font-semibold text-center"
+      onClick={onClick}
     >
       {t("navigationContinue", { kind: t("exercise"), name: nextExercise.name })}  →
-    </a>
+    </Link>
   )
 }
 
-const Assignment: React.FC<{ showHint: boolean, setShowHint: (value: boolean) => void }> = ({ showHint, setShowHint }) => {
+const Assignment: React.FC<{ exercise: ExerciseModel, showHint: boolean, setShowHint: (value: boolean) => void }> = ({ exercise, showHint, setShowHint }) => {
   const { t } = useTranslation()
   return (
     <div>
-      <p className="mb-4" dangerouslySetInnerHTML={{
-        __html: exercise.descriptionHtml!,
-      }}>
-      </p>
+      <Description className="mb-4">{exercise.description}</Description>
 
       <button
         onClick={() => setShowHint(!showHint)}
@@ -120,11 +144,21 @@ const Assignment: React.FC<{ showHint: boolean, setShowHint: (value: boolean) =>
 
 const Exercise: React.FC = () => {
   const { t } = useTranslation()
+  const { lessonId, exerciseId } = useParams()
+
+  const lessonUrl = functional.lessons[Number(lessonId) - 1]
+  const lesson = require(`./exercises/${lessonUrl}`)
+  const exercise = lesson.exercises[Number(exerciseId) - 1]
+  const nextExercise = lesson.exercises[Number(exerciseId)]
+
+  // Fake progress
+  const progress = lesson.exercises.map((_: any, i: number) => ({ status: i < Number(exerciseId) ? "passed" : "pending" }))
 
   const [code, setCode] = useState<string>(exercise.defaultCode ?? "")
   const [showHint, setShowHint] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false)
-  const [result, setResult] = useState<ResultStatus>(null)
+  const [results, setResults] = useState<TestReport[] | null>(null)
+  const [expectations, setExpectations] = useState<AnalysisResult[] | null>(null)
   const [processing, setProcessing] = useState<boolean>(false)
 
   const editorRef = useRef<any>(null)
@@ -135,46 +169,47 @@ const Exercise: React.FC = () => {
 
   const submit = () => {
     setProcessing(true)
-    setResult(null)
+    setResults(null)
 
-    setTimeout(() => {
-      const success = Math.random() > 0.5
-      setResult(success ? "success" : "error")
-      setProcessing(false)
-    }, 1500)
+    const parser = new YukigoHaskellParser();
+    const ast = parser.parse(code);
+    const tester = new Tester(ast, interpreterConfig);
+    const tests = parser.parse(exercise.test);
+    const testResults = tester.test(tests);
+
+    if (resultStatus(testResults) === 'passed') {
+      const analyzer = new Analyzer();
+      // Expectations example:
+      // [
+      //   {
+      //     "args": [{ "name": "cantidadDiasEnero" }],
+      //     "inspection": "HasBinding",
+      //     "expected": true
+      //   }
+      // ]
+      const expectationResults = analyzer.analyze(ast, exercise.expectations || []);
+      setExpectations(expectationResults)
+    }
+
+    setResults(testResults)
+    setProcessing(false)
   }
 
-  const currentProgressStatus: ProgressStatus = processing
-    ? "processing"
-    : result === "success"
-      ? "passed"
-      : result === "error"
-        ? "failed"
-        : "pending"
+  const currentProgressStatus = resultStatus(results || [])
+  progress[Number(exerciseId) - 1] = { status: currentProgressStatus, active: true }
 
   return (
-    <Main fullscreen={fullscreen} book={book} chapter={chapter} lesson={lesson} exercise={exercise}>
+    <Main fullscreen={fullscreen} book={pdep} chapter={functional} lesson={lesson} exercise={exercise}>
       <ContentTitle>
         {t("exerciseTitle", { number: 8, name: exercise.name })}
       </ContentTitle>
 
-      <ProgressBar
-        items={[
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: "passed" },
-          { status: currentProgressStatus, active: true },
-          { status: "pending" },
-        ]}
-      />
+      {/* TODO: Save the progress? */}
+      <ProgressBar items={progress} />
 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Assignment setShowHint={setShowHint} showHint={showHint} />
+        <Assignment exercise={exercise} setShowHint={setShowHint} showHint={showHint} />
 
         <div className="border rounded">
           <div className="flex justify-between items-center border-b px-3 py-2">
@@ -207,10 +242,12 @@ const Exercise: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8">
-        <ExerciseResult status={result} />
-        {result && <NextButton nextExercise={nextExercise} />}
-      </div>
+      {results &&
+        <div className="mt-8">
+          <ExerciseResult reports={results} />
+          <ExpectationResult expectations={expectations || []} />
+          <NextButton nextExercise={nextExercise} onClick={() => { setProcessing(false); setResults(null) }} />
+        </div>}
     </Main>
   )
 }

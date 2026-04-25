@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { Book, Chapter } from "./model/book";
+import { DeepPartial } from "./helpers/DeepPartial";
+import { Book } from "./model/book";
 import { Exercise, Guide } from "./model/guide";
 import { Topic } from "./model/topic";
-import { DeepPartial } from "./helpers/DeepPartial";
 
 export type BreadcrumbsProps = {
   book: DeepPartial<Book>,
@@ -25,7 +25,7 @@ export function Breadcrumbs({ book, chapter, lesson, exercise }: BreadcrumbsProp
         <>
           <span>/</span>
           <Link to={`/chapters/${chapter.id}`} className="hover:underline">
-            1. {chapter.name}
+            {chapter.id}. {chapter.name}
           </Link>
         </>
       )}
@@ -34,7 +34,7 @@ export function Breadcrumbs({ book, chapter, lesson, exercise }: BreadcrumbsProp
         <>
           <span>/</span>
           <Link to={`/lessons/${lesson.id}`} className="hover:underline">
-            1. {lesson.name}
+            {lesson.id}. {lesson.name}
           </Link>
         </>
       )}
@@ -43,7 +43,7 @@ export function Breadcrumbs({ book, chapter, lesson, exercise }: BreadcrumbsProp
         <>
           <span>/</span>
           <Link to={`/exercises/${exercise.id}`} className="hover:underline">
-            1. {exercise.name}
+            {exercise.id}. {exercise.name}
           </Link>
         </>
       )}

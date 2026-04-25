@@ -10,16 +10,16 @@ function statusFor(_exercise: DeepPartial<Exercise>): SubmissionStatus {
   return SubmissionStatus.Pending
 }
 
-export function ExercisesList({ exercises }: { exercises: DeepPartial<Exercise>[] }) {
+export function ExercisesList({ lessonId, exercises }: { lessonId: string | undefined, exercises: DeepPartial<Exercise>[] }) {
   return <ul className="space-y-1 columns-3 mb-8">
-    {exercises.map((exercise) => (
+    {exercises.map((exercise, index) => (
       <li key={exercise.id} className="flex items-center gap-2">
         <span className={`text-lg ${statusIcon(statusFor(exercise))}`}>●</span>
         <Link
-          to={`/exercises/${exercise.id}`}
+          to={`/lessons/${lessonId || '0'}/exercises/${index + 1}`}
           className="text-blue-600 hover:underline"
         >
-          {exercise.id}. {exercise.name}
+          {index + 1}. {exercise.name}
         </Link>
       </li>
     ))}
