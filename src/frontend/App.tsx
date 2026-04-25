@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { HashRouter, Routes, Route } from "react-router-dom"
 import Lesson from "./Lesson"
 import Exercise from "./Exercise"
 import Book from './Book';
@@ -8,11 +8,8 @@ import './i18n';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        {/* TODO doesn't work */}
-        <Route path="/index.html" element={<Book />} />
-
         <Route path="/" element={<Book />} />
         <Route path="/chapters/:chapterId" element={<Chapter />} />
         {/* <Route path="/chapters/:chapterId/appendix" element={<Appendix />} /> */}
@@ -20,7 +17,7 @@ function App() {
         <Route path="/lessons/:lessonId/exercises/:exerciseId" element={<Exercise />} />
         {/* <Route path="/faqs" element={<Faqs />} /> */}
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 export default App;

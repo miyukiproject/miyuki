@@ -1,6 +1,6 @@
 import { Topic } from "./topic";
 import { Content } from "./content"
-import chapter from "../exercises/mumuki-tema-introduccion-a-la-programacion-funcional-pdep-utn.json"
+import chapter from "../../exercises/mumuki-tema-introduccion-a-la-programacion-funcional-pdep-utn.json"
 
 export class Book extends Content {
   public chapters: Chapter[] = []
