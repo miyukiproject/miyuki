@@ -9,7 +9,7 @@ const socialButtonClass =
 export default function Footer() {
   return (
     <footer className="mt-14">
-      <div className="mx-auto max-w-5xl border-t border-gray-300 pt-6">
+      <div className="border-t border-gray-300 pt-6">
         <div className="flex flex-col gap-5 text-sm text-gray-600 md:flex-row md:items-start md:justify-between">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
