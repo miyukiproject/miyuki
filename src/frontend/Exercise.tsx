@@ -101,7 +101,7 @@ const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
     onClick={onClick}
     disabled={disabled}
     className={`w-full py-3 rounded font-semibold flex justify-center items-center gap-2 text-white ${
-      disabled ? "bg-gray-400" : "bg-pink-500 hover:bg-pink-600"
+      disabled ? "bg-gray-400" : "bg-[#ff5b81] hover:bg-[#d94d6e]"
     }`}>
     <span className={disabled ? "animate-spin" : ""}>↻</span> Enviar
   </button>
