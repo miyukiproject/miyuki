@@ -144,11 +144,11 @@ const Assignment: React.FC<{
         {exercise.description}
       </Description>
       {exercise.hint && (
-      <button
-        onClick={() => setShowHint(!showHint)}
-        className="text-blue-600 flex items-center gap-2 mb-2">
-        💡 {t("needAHint")}
-      </button>
+        <button
+          onClick={() => setShowHint(!showHint)}
+          className="text-blue-600 flex items-center gap-2 mb-2">
+          💡 {t("needAHint")}
+        </button>
       )}
 
       {showHint && (
