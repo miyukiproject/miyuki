@@ -139,14 +139,17 @@ const Assignment: React.FC<{
 }> = ({ exercise, showHint, setShowHint }) => {
   const { t } = useTranslation();
   return (
-    <div>
-      <Description className="mb-4">{exercise.description}</Description>
-
+    <div className={`exercise-assignment ${layout.text[exercise.layout]}`}>
+      <Description className="mb-4 text-justify">
+        {exercise.description}
+      </Description>
+      {exercise.hint && (
       <button
         onClick={() => setShowHint(!showHint)}
         className="text-blue-600 flex items-center gap-2 mb-2">
         💡 {t("needAHint")}
       </button>
+      )}
 
       {showHint && (
         <div className="bg-blue-50 border border-blue-200 p-3 rounded">
@@ -155,6 +158,17 @@ const Assignment: React.FC<{
       )}
     </div>
   );
+};
+
+const layout = {
+  text: {
+    "input_right": "w-full lg:w-1/2",
+    "input_bottom": "w-full",
+  },
+  container: {
+    "input_right": "flex flex-col lg:flex-row",
+    "input_bottom": "flex flex-col",
+  },
 };
 
 const Exercise: React.FC = () => {
@@ -238,14 +252,14 @@ const Exercise: React.FC = () => {
       {/* TODO: Save the progress? */}
       <ProgressBar items={progress} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className={`${layout.container[exercise.layout]} gap-6`}>
         <Assignment
           exercise={exercise}
           setShowHint={setShowHint}
           showHint={showHint}
         />
 
-        <div className="border rounded">
+        <div className={`border rounded ${layout.text[exercise.layout]}`}>
           <div className="flex justify-between items-center border-b px-3 py-2">
             <div className="font-semibold">✏️ {t("solution")}</div>
             <div className="flex gap-3 text-gray-600">
