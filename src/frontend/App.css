@@ -170,3 +170,21 @@ code {
   border-radius: 4px;
   padding: 2px 4px;
 }
+
+.progress-bar-step {
+  position: relative;
+  width: stretch;
+  height: 0.5rem;
+}
+
+.progress-bar-step.active::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 7px;
+  width: 7px;
+  background-color: #3498db;
+  border-radius: 50%;
+}
