@@ -4,7 +4,12 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "mumuki-rose": "#ff5b81",
+        "mumuki-rose-darken": "#d94d6e"
+      }
+    },
   },
   plugins: [],
 }
