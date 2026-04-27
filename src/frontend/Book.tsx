@@ -6,6 +6,7 @@ import { Main } from "./Main";
 import { Book as BookModel } from "./model/book";
 import { Topic } from "./model/topic";
 import { ContentChildrenTitle, ContentChildTitle, ContentTitle } from "./Title";
+import IntroBanner from "./IntroBanner";
 
 const book: DeepPartial<BookModel> = {
   name: "PdeP",
@@ -59,6 +60,7 @@ const Book: React.FC = () => {
         <p className="text-gray-600 mb-6">
           {book.description}
         </p>
+        <IntroBanner />
         <Link
           to="/lessons/1"
           className="inline-block bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded font-semibold"
@@ -66,6 +68,7 @@ const Book: React.FC = () => {
           {t("keepLearning")}
         </Link>
       </div>
+
 
       {/* Chapters */}
       <section className="max-w-4xl mx-auto w-full">
