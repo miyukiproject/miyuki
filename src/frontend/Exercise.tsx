@@ -176,8 +176,8 @@ const Exercise: React.FC = () => {
   const { lessonId, exerciseId } = useParams();
 
   const lessonUrl = functional.lessons[Number(lessonId) - 1];
-  const lesson = exerciseModules[`../exercises/${lessonUrl}.json`];
-  console.log(lesson)
+  const lessonModule = exerciseModules[`../exercises/${lessonUrl}.json`];
+  const lesson = lessonModule.default;
   const exercise = lesson.exercises[Number(exerciseId) - 1];
   const nextExercise = lesson.exercises[Number(exerciseId)];
 
