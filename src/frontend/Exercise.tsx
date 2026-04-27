@@ -183,6 +183,8 @@ const Exercise: React.FC = () => {
 
   // Fake progress
   const progress = lesson.exercises.map((_: any, i: number) => ({
+    lessonId: lessonId,
+    exerciseId: i + 1,
     status: i < Number(exerciseId) ? "passed" : "pending",
   }));
 
@@ -234,6 +236,7 @@ const Exercise: React.FC = () => {
 
   const currentProgressStatus = resultStatus(results || []);
   progress[Number(exerciseId) - 1] = {
+    ...progress[Number(exerciseId) - 1],
     status: currentProgressStatus,
     active: true,
   };

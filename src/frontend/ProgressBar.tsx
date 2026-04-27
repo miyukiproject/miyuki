@@ -1,11 +1,14 @@
+import { Link } from "react-router-dom";
 import { ProgressStatus } from "./ProgressStatus";
 
 interface ProgressItemProps {
+  lessonId: string,
+  exerciseId: number
   status: ProgressStatus
   active?: boolean
 }
 
-const ProgressItem: React.FC<ProgressItemProps> = ({ status, active }) => {
+const ProgressItem: React.FC<ProgressItemProps> = ({ status, active,lessonId, exerciseId}) => {
   const styles: Record<ProgressStatus, string> = {
     passed: "bg-green-500",
     pending: "bg-gray-300",
@@ -15,16 +18,18 @@ const ProgressItem: React.FC<ProgressItemProps> = ({ status, active }) => {
   };
 
   return (
-    <div
-      className={`h-4 w-4 rounded-full ${styles[status]} ${
-        active ? "ring-2 ring-gray-700" : ""
+    <Link
+    to={`/lessons/${lessonId || '0'}/exercises/${exerciseId}`}
+      className={`progress-bar-step ${styles[status]} ${
+        active ? "active" : ""
       }`}
-    />
+    >
+    </Link>
   );
 };
 
 export const ProgressBar: React.FC<{ items: ProgressItemProps[] }> = ({ items }) => (
-  <div className="flex gap-2 mb-6">
+  <div className="flex gap-0.5 mb-6">
     {items.map((item, i) => (
       <ProgressItem key={i} {...item} />
     ))}
