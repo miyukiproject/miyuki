@@ -2,7 +2,7 @@ import Editor, { OnMount } from "@monaco-editor/react";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
-import { AnalysisResult, Analyzer, Tester, TestReport } from "yukigo";
+import { AnalysisResult, Analyzer, MulangAdapter, Tester, TestReport } from "yukigo";
 import { YukigoHaskellParser } from "yukigo-haskell-parser";
 import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext";
 import { Description } from "./Description";
@@ -13,6 +13,7 @@ import { Exercise as ExerciseModel } from "./model/guide";
 import { ProgressBar } from "./ProgressBar";
 import { ContentTitle } from "./Title";
 import Feedback from "./Feedback";
+import { aD } from "react-router/dist/development/instrumentation-BB0wRuqz";
 
 const exerciseModules = import.meta.glob("../exercises/**/*", { eager: true });
 
@@ -108,12 +109,12 @@ const Assignment: React.FC<{
 
 const layout = {
   text: {
-    "input_right": "w-full lg:w-1/2",
-    "input_bottom": "w-full",
+    input_right: "w-full lg:w-1/2",
+    input_bottom: "w-full",
   },
   container: {
-    "input_right": "flex flex-col lg:flex-row",
-    "input_bottom": "flex flex-col",
+    input_right: "flex flex-col lg:flex-row",
+    input_bottom: "flex flex-col",
   },
 };
 
@@ -141,6 +142,8 @@ const Exercise: React.FC = () => {
   const [expectations, setExpectations] = useState<AnalysisResult[] | null>(
     null,
   );
+  const [error, setError] = useState<Error | null>(null);
+
   const [processing, setProcessing] = useState<boolean>(false);
 
   const editorRef = useRef<any>(null);
@@ -149,39 +152,31 @@ const Exercise: React.FC = () => {
     editorRef.current = editor;
   };
 
-  const submit = () => {
-    setProcessing(true);
-    setResults(null);
-    setExpectations(null);
-
+const submit = () => {
+  setProcessing(true);
+  setResults(null);
+  setExpectations(null);
+  setError(null);
+  try {
     const parser = new YukigoHaskellParser();
     const ast = parser.parse(code);
     const tester = new Tester(ast, interpreterConfig);
-    const tests = parser.parse(exercise.test);
-    const testResults = tester.test(tests);
-    if (resultStatus(testResults) !== "passed") {
-      setResults(testResults);
-      setProcessing(false);
-      return;
-    }
-
-    const analyzer = new Analyzer();
-    // Expectations example:
-    // [
-    //   {
-    //     "args": [{ "name": "cantidadDiasEnero" }],
-    //     "inspection": "HasBinding",
-    //     "expected": true
-    //   }
-    // ]
-    const expectationResults = analyzer.analyze(
-      ast,
-      exercise.expectations || [],
-    );
-    setExpectations(expectationResults);
+    const testResults = tester.test(parser.parse(exercise.test));
     setResults(testResults);
+
+    if (resultStatus(testResults) === "passed") {
+      const analyzer = new Analyzer()
+      const adapter = new MulangAdapter()
+      const expectations = exercise.expectations.map((exp) => adapter.translateMulangInspection(exp)) || []
+      const expectationResults = analyzer.analyze(ast, expectations);
+      setExpectations(expectationResults);
+    }
+  } catch (err) {
+    setError(err instanceof Error ? err : new Error(String(err)));
+  } finally {
     setProcessing(false);
-  };
+  }
+};
 
   const currentProgressStatus = resultStatus(results || []);
   progress[Number(exerciseId) - 1] = {
@@ -254,7 +249,7 @@ const Exercise: React.FC = () => {
       </div>
 
       <div className="mt-8">
-        <Feedback results={results} expectations={expectations} />
+        <Feedback results={results} expectations={expectations} error={error} />
         <NextButton
           nextExercise={nextExercise}
           onClick={() => {
