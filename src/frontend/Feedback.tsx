@@ -105,7 +105,8 @@ const FeedbackMessage = ({ msg }: MessageProps) => (
 );
 
 export default function Feedback({ results, expectations, error }: Props) {
-  const { t } = useTranslation();
+  console.log(results, expectations, error)
+  const { t } = useTranslation(["translation", "yukigo"]);
   if (!results && !expectations && !error) return <></>;
 
   if (error)
@@ -156,7 +157,10 @@ export default function Feedback({ results, expectations, error }: Props) {
               <span className="flex gap-2">
                 {passed ? <CheckIcon /> : <CrossIcon />}
                 <p key={index}>
-                  {binding} {inspection} {args} {error}
+                  {t(`yukigo:${inspection}_named`, {
+                    binding: binding === "*" ? t("yukigo:solution"): binding,
+                    must: t("yukigo:must")
+                  })}
                 </p>
               </span>
             ),

@@ -13,7 +13,9 @@ import { Exercise as ExerciseModel } from "./model/guide";
 import { ProgressBar } from "./ProgressBar";
 import { ContentTitle } from "./Title";
 import Feedback from "./Feedback";
-import { aD } from "react-router/dist/development/instrumentation-BB0wRuqz";
+
+type FeedbackData = Record<string, string>
+const populate = (template: string, data: FeedbackData) => template.replace(/\${(\w+)}/g, (_, key) => data[key]);
 
 const exerciseModules = import.meta.glob("../exercises/**/*", { eager: true });
 
@@ -169,6 +171,7 @@ const submit = () => {
       const adapter = new MulangAdapter()
       const expectations = exercise.expectations.map((exp) => adapter.translateMulangInspection(exp)) || []
       const expectationResults = analyzer.analyze(ast, expectations);
+      console.log(expectationResults)
       setExpectations(expectationResults);
     }
   } catch (err) {
