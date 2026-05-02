@@ -16,6 +16,21 @@ type IconProps = {
   className?: string;
 };
 
+const colorStyles = {
+  red: {
+    container: "border-red-500 bg-red-50",
+    text: "text-red-700",
+  },
+  yellow: {
+    container: "border-yellow-500 bg-yellow-50",
+    text: "text-yellow-700",
+  },
+  green: {
+    container: "border-green-500 bg-green-50",
+    text: "text-green-700",
+  },
+};
+
 const ErrorIcon = ({ className }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +95,7 @@ type ContainerProps = {
 };
 
 const FeedbackContainer = ({ color, children }: ContainerProps) => (
-  <div className={`border-l-4 border-${color}-500 bg-red-50 p-4 mb-6`}>
+  <div className={`border-l-4 p-4 mb-6 ${colorStyles[color].container}`}>
     {children}
   </div>
 );
@@ -92,7 +107,7 @@ type TitleProps = {
 const FeedbackTitle = ({ heading, color, icon }: TitleProps) => (
   <div className="flex gap-2 items-center mb-2">
     {icon}
-    <h4 className={`text-${color}-700 font-semibold`}>{heading}</h4>
+    <h4 className={`${colorStyles[color].text} font-semibold`}>{heading}</h4>
   </div>
 );
 type MessageProps = {
@@ -103,6 +118,27 @@ const FeedbackMessage = ({ msg }: MessageProps) => (
     <span className="text-sm font-mono">{msg}</span>
   </div>
 );
+
+const TestReportRow = ({ name, status, message }: TestReport) => (
+  <div className="bg-white p-2 flex flex-col">
+    <div className="flex gap-2 items-center">
+      {status === "passed" ? <CheckIcon /> : <CrossIcon />}
+      <p>{name}</p>
+    </div>
+    {message && <p className="ml-8 text-sm text-gray-600">{message}</p>}
+  </div>
+);
+
+const TestReportItem = (report: TestReport) =>
+  report.children ? (
+    <>
+      {report.children.map((child, i) => (
+        <TestReportRow key={i} {...child} />
+      ))}
+    </>
+  ) : (
+    <TestReportRow {...report} />
+  );
 
 export default function Feedback({ results, expectations, error }: Props) {
   console.log(results, expectations, error)
@@ -129,16 +165,8 @@ export default function Feedback({ results, expectations, error }: Props) {
           color={"red"}
           icon={<ErrorIcon className="fill-red-700" />}
         />
-        {results.map(({ name, message, status }, i) => (
-          <div className="bg-white p-2 flex  flex-col ">
-            <div className="flex gap-2 items-center">
-              {status === "passed" ? <CheckIcon /> : <CrossIcon />}
-              <p key={i + "-" + name}>{name}</p>
-            </div>
-            <p className="ml-8" key={name}>
-              {message}
-            </p>
-          </div>
+        {results.map((report, i) => (
+          <TestReportItem key={i} {...report} />
         ))}
       </FeedbackContainer>
     );
@@ -152,19 +180,36 @@ export default function Feedback({ results, expectations, error }: Props) {
           icon={<WarningIcon className="fill-yellow-700" />}
         />
         <div className="bg-white border rounded p-3 text-sm font-mono">
-          {expectations.map(
-            ({ rule: { inspection, args, binding }, passed, error }, index) => (
-              <span className="flex gap-2">
+          {expectations.map(({ rule, passed }, index) => {
+            const {
+              inspection,
+              args,
+              binding,
+              expected,
+              targetSuffix,
+              matcher,
+            } = rule;
+
+            const hasTarget = args && args.length > 0;
+            const suffix = hasTarget && targetSuffix ? `_${targetSuffix}` : "";
+            const translationKey = `${inspection}${suffix}`;
+
+            return (
+              <span className="flex gap-2" key={index}>
                 {passed ? <CheckIcon /> : <CrossIcon />}
-                <p key={index}>
-                  {t(`yukigo:${inspection}_named`, {
-                    binding: binding === "*" ? t("yukigo:solution"): binding,
-                    must: t("yukigo:must")
+                <p>
+                  {t(`yukigo:${translationKey}`, {
+                    binding: binding === "*" ? t("yukigo:solution") : binding,
+                    must: t(expected ? "yukigo:must" : "yukigo:must_not"),
+                    target: hasTarget ? args[0] : undefined,
+                    matching: matcher
+                      ? t(`yukigo:${matcher.type}`, { value: matcher.value })
+                      : "",
                   })}
                 </p>
               </span>
-            ),
-          )}
+            );
+          })}
         </div>
       </FeedbackContainer>
     );
