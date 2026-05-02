@@ -161,7 +161,7 @@ const submit = () => {
   setError(null);
   try {
     const parser = new YukigoHaskellParser();
-    const ast = parser.parse(code);
+    const ast = parser.parse(exercise.extra.concat(code));
     const tester = new Tester(ast, interpreterConfig);
     const testResults = tester.test(parser.parse(exercise.test));
     setResults(testResults);
