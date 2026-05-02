@@ -96,7 +96,6 @@
   "DeclaresTypeSignature_except": "{{binding}} {{must}} declarar firmas de tipos diferentes a {{target}}",
   "DeclaresTypeSignature_like": "{{binding}} {{must}} declarar una firma para algo parecido {{target}}",
   "DeclaresTypeSignature_named": "{{binding}} {{must}} declarar una firma {{target}}",
-  "HasTypeSignature_named": "{{binding}} {{must}} declarar una firma {{target}}",
   "DeclaresTypeSignature": "{{binding}} {{must}} declarar firmas de tipos",
   "DeclaresVariable_except": "{{binding}} {{must}} declarar variables diferentes a {{target}}{{matching}}",
   "DeclaresVariable_like": "{{binding}} {{must}} declarar una variable parecida a {{target}}{{matching}}",
