@@ -161,7 +161,7 @@ const submit = () => {
   setError(null);
   try {
     const parser = new YukigoHaskellParser();
-    const ast = parser.parse(exercise.extra.concat(code));
+    const ast = parser.parse(exercise.extra ? exercise.extra.concat(code) : code);
     const tester = new Tester(ast, interpreterConfig);
     const testResults = tester.test(parser.parse(exercise.test));
     setResults(testResults);
@@ -196,7 +196,7 @@ const submit = () => {
       lesson={lesson}
       exercise={exercise}>
       <ContentTitle>
-        {t("exerciseTitle", { number: 8, name: exercise.name })}
+        {t("exerciseTitle", { number: Number(exerciseId), name: exercise.name })}
       </ContentTitle>
 
       {/* TODO: Save the progress? */}
