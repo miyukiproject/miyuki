@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { AnalysisResult, TestReport } from "yukigo";
+import { AnalysisResult, InspectionRule, TestReport } from "yukigo";
 
 type Props = {
   results: TestReport[] | null;
@@ -140,87 +140,104 @@ const TestReportItem = (report: TestReport) =>
     <TestReportRow {...report} />
   );
 
-export default function Feedback({ results, expectations, error }: Props) {
-  console.log(results, expectations, error)
+const ErrorFeedback = (error: Error) => {
   const { t } = useTranslation(["translation", "yukigo"]);
-  if (!results && !expectations && !error) return <></>;
 
-  if (error)
-    return (
-      <FeedbackContainer color={"red"}>
-        <FeedbackTitle
-          heading={t("errored")}
-          color={"red"}
-          icon={<ErrorIcon className="fill-red-700" />}
-        />
-        <FeedbackMessage msg={error.message} />
-      </FeedbackContainer>
-    );
+  <FeedbackContainer color={"red"}>
+    <FeedbackTitle
+      heading={t("errored")}
+      color={"red"}
+      icon={<ErrorIcon className="fill-red-700" />}
+    />
+    <FeedbackMessage msg={error.message} />
+  </FeedbackContainer>;
+};
 
-  if (results && !testsOk(results))
-    return (
-      <FeedbackContainer color={"red"}>
-        <FeedbackTitle
-          heading={t("failed")}
-          color={"red"}
-          icon={<ErrorIcon className="fill-red-700" />}
-        />
-        {results.map((report, i) => (
-          <TestReportItem key={i} {...report} />
-        ))}
-      </FeedbackContainer>
-    );
-
-  if (expectations && !expectationsOk(expectations))
-    return (
-      <FeedbackContainer color={"yellow"}>
-        <FeedbackTitle
-          heading={t("failedExpectations")}
-          color={"yellow"}
-          icon={<WarningIcon className="fill-yellow-700" />}
-        />
-        <div className="bg-white border rounded p-3 text-sm font-mono">
-          {expectations.map(({ rule, passed }, index) => {
-            const {
-              inspection,
-              args,
-              binding,
-              expected,
-              targetSuffix,
-              matcher,
-            } = rule;
-
-            const hasTarget = args && args.length > 0;
-            const suffix = hasTarget && targetSuffix ? `_${targetSuffix}` : "";
-            const translationKey = `${inspection}${suffix}`;
-
-            return (
-              <span className="flex gap-2" key={index}>
-                {passed ? <CheckIcon /> : <CrossIcon />}
-                <p>
-                  {t(`yukigo:${translationKey}`, {
-                    binding: binding === "*" ? t("yukigo:solution") : binding,
-                    must: t(expected ? "yukigo:must" : "yukigo:must_not"),
-                    target: hasTarget ? args[0] : undefined,
-                    matching: matcher
-                      ? t(`yukigo:${matcher.type}`, { value: matcher.value })
-                      : "",
-                  })}
-                </p>
-              </span>
-            );
-          })}
-        </div>
-      </FeedbackContainer>
-    );
-
+const TestsFeedback = (results: TestReport[]) => {
+  const { t } = useTranslation(["translation", "yukigo"]);
   return (
-    <FeedbackContainer color={"green"}>
+    <FeedbackContainer color={"red"}>
       <FeedbackTitle
-        heading={t("passed")}
-        color={"green"}
-        icon={<SuccessIcon className="fill-green-700" />}
+        heading={t("failed")}
+        color={"red"}
+        icon={<ErrorIcon className="fill-red-700" />}
       />
+      {results.map((report, i) => (
+        <TestReportItem key={i} {...report} />
+      ))}
     </FeedbackContainer>
   );
+};
+
+const ExpectationResult = (
+  rule: InspectionRule,
+  index: number,
+  passed: boolean,
+) => {
+  const { t } = useTranslation(["translation", "yukigo"]);
+
+  const { inspection, args, binding, expected, targetSuffix, matcher } = rule;
+
+  const hasTarget = args && args.length > 0;
+  const suffix = hasTarget && targetSuffix ? `_${targetSuffix}` : "";
+  const translationKey = `${inspection}${suffix}`;
+
+  return (
+    <span className="flex gap-2" key={index}>
+      {passed ? <CheckIcon /> : <CrossIcon />}
+      <p>
+        {t(`yukigo:${translationKey}`, {
+          binding: binding === "*" ? t("yukigo:solution") : binding,
+          must: t(expected ? "yukigo:must" : "yukigo:must_not"),
+          target: hasTarget ? args[0] : undefined,
+          matching: matcher
+            ? t(`yukigo:${matcher.type}`, { value: matcher.value })
+            : "",
+        })}
+      </p>
+    </span>
+  );
+};
+
+const ExpectationsFeedback = (expectations: AnalysisResult[]) => {
+  const { t } = useTranslation(["translation", "yukigo"]);
+  return (
+    <FeedbackContainer color={"yellow"}>
+      <FeedbackTitle
+        heading={t("failedExpectations")}
+        color={"yellow"}
+        icon={<WarningIcon className="fill-yellow-700" />}
+      />
+      <div className="bg-white border rounded p-3 text-sm font-mono">
+        {expectations.map(({ rule, passed }, index) =>
+          ExpectationResult(rule, index, passed),
+        )}
+      </div>
+    </FeedbackContainer>
+  );
+};
+
+const SuccessFeedback = () => {
+  const { t } = useTranslation(["translation", "yukigo"]);
+
+  <FeedbackContainer color={"green"}>
+    <FeedbackTitle
+      heading={t("passed")}
+      color={"green"}
+      icon={<SuccessIcon className="fill-green-700" />}
+    />
+  </FeedbackContainer>;
+};
+
+export default function Feedback({ results, expectations, error }: Props) {
+  if (!results && !expectations && !error) return <></>;
+
+  if (error) return ErrorFeedback(error);
+
+  if (results && !testsOk(results)) TestsFeedback(results);
+
+  if (expectations && !expectationsOk(expectations))
+    return ExpectationsFeedback(expectations);
+
+  return SuccessFeedback();
 }
