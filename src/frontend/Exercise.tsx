@@ -2,7 +2,7 @@ import Editor, { OnMount } from "@monaco-editor/react";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
-import { AnalysisResult, Analyzer, Tester, TestReport } from "yukigo";
+import { AnalysisResult, Analyzer, MulangAdapter, Tester, TestReport } from "yukigo";
 import { YukigoHaskellParser } from "yukigo-haskell-parser";
 import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext";
 import { Description } from "./Description";
@@ -12,6 +12,10 @@ import { functional, pdep } from "./model/book";
 import { Exercise as ExerciseModel } from "./model/guide";
 import { ProgressBar } from "./ProgressBar";
 import { ContentTitle } from "./Title";
+import Feedback from "./Feedback";
+
+type FeedbackData = Record<string, string>
+const populate = (template: string, data: FeedbackData) => template.replace(/\${(\w+)}/g, (_, key) => data[key]);
 
 const exerciseModules = import.meta.glob("../exercises/**/*", { eager: true });
 
@@ -29,70 +33,6 @@ const resultStatus = (reports: TestReport[]) =>
       ? "error"
       : "failed";
 
-const ExerciseResult: React.FC<{ reports: TestReport[] }> = ({ reports }) => {
-  const { t } = useTranslation();
-  if (resultStatus(reports) === "passed") {
-    return (
-      <div className="border-l-4 border-green-500 bg-green-50 p-4 mb-6">
-        <h4 className="text-green-700 font-semibold">✔ {t("passed")}</h4>
-      </div>
-    );
-  }
-
-  if (resultStatus(reports) === "error") {
-    return (
-      <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
-        <h4 className="text-red-700 font-semibold mb-2">✖ {t("aborted")}</h4>
-        <div className="bg-white border rounded p-3 text-sm font-mono">
-          {"No results :("}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
-      <h4 className="text-red-700 font-semibold mb-2">✖ {t("failed")}</h4>
-      <div className="bg-white border rounded p-3 text-sm font-mono">
-        {reports.map((report) =>
-          report.children!.map(({ name, status, message }) => (
-            <p key={name}>
-              {status === "passed" ? "✔" : "✖"} {name} {message}
-            </p>
-          )),
-        )}
-      </div>
-    </div>
-  );
-};
-
-const expectationsOk = (expectations: AnalysisResult[]) =>
-  expectations.every((res) => res.passed);
-
-const ExpectationResult: React.FC<{ expectations: AnalysisResult[] }> = ({
-  expectations,
-}) => {
-  const { t } = useTranslation();
-  if (expectationsOk(expectations)) return <></>;
-
-  return (
-    <div className="border-l-4 border-red-500 bg-red-50 p-4 mb-6">
-      <h4 className="text-red-700 font-semibold mb-2">
-        ✖ {t("failedExpectations")}
-      </h4>
-      <div className="bg-white border rounded p-3 text-sm font-mono">
-        {expectations.map(
-          ({ rule: { inspection, args, binding }, passed, error }, index) => (
-            <p key={index}>
-              {passed ? "✔" : "✖"} {binding} {inspection} {args} {error}
-            </p>
-          ),
-        )}
-      </div>
-    </div>
-  );
-};
-
 const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
   onClick,
   disabled,
@@ -100,10 +40,19 @@ const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
   <button
     onClick={onClick}
     disabled={disabled}
-    className={`w-full py-3 rounded font-semibold flex justify-center items-center gap-2 text-white ${
-      disabled ? "bg-gray-400" : "bg-[#ff5b81] hover:bg-[#d94d6e]"
+    className={`w-full py-3 rounded font-semibold flex justify-center items-center gap-1 text-white ${
+      disabled ? "bg-gray-400" : "bg-mumuki-rose hover:bg-mumuki-rose-darken"
     }`}>
-    <span className={disabled ? "animate-spin" : ""}>↻</span> Enviar
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="25"
+      fill="currentColor"
+      className="bi bi-play-fill"
+      viewBox="0 0 16 16">
+      <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
+    </svg>
+    <span>Enviar</span>
   </button>
 );
 
@@ -121,7 +70,7 @@ function NextButton({
   return (
     <Link
       to={`/lessons/${lessonId}/exercises/${Number(exerciseId) + 1}`}
-      className="block w-full mt-4 bg-pink-400 hover:bg-pink-500 text-white py-3 rounded font-semibold text-center"
+      className="hover:text-white block w-full mt-4 bg-mumuki-rose hover:bg-mumuki-rose-darken text-white py-3 rounded font-semibold text-center"
       onClick={onClick}>
       {t("navigationContinue", {
         kind: t("exercise"),
@@ -162,12 +111,12 @@ const Assignment: React.FC<{
 
 const layout = {
   text: {
-    "input_right": "w-full lg:w-1/2",
-    "input_bottom": "w-full",
+    input_right: "w-full lg:w-1/2",
+    input_bottom: "w-full",
   },
   container: {
-    "input_right": "flex flex-col lg:flex-row",
-    "input_bottom": "flex flex-col",
+    input_right: "flex flex-col lg:flex-row",
+    input_bottom: "flex flex-col",
   },
 };
 
@@ -176,8 +125,8 @@ const Exercise: React.FC = () => {
   const { lessonId, exerciseId } = useParams();
 
   const lessonUrl = functional.lessons[Number(lessonId) - 1];
-  const lesson = exerciseModules[`../exercises/${lessonUrl}.json`];
-  console.log(lesson)
+  const lessonModule = exerciseModules[`../exercises/${lessonUrl}.json`];
+  const lesson = lessonModule.default;
   const exercise = lesson.exercises[Number(exerciseId) - 1];
   const nextExercise = lesson.exercises[Number(exerciseId)];
 
@@ -195,6 +144,8 @@ const Exercise: React.FC = () => {
   const [expectations, setExpectations] = useState<AnalysisResult[] | null>(
     null,
   );
+  const [error, setError] = useState<Error | null>(null);
+
   const [processing, setProcessing] = useState<boolean>(false);
 
   const editorRef = useRef<any>(null);
@@ -203,36 +154,32 @@ const Exercise: React.FC = () => {
     editorRef.current = editor;
   };
 
-  const submit = () => {
-    setProcessing(true);
-    setResults(null);
-
+const submit = () => {
+  setProcessing(true);
+  setResults(null);
+  setExpectations(null);
+  setError(null);
+  try {
     const parser = new YukigoHaskellParser();
-    const ast = parser.parse(code);
+    const ast = parser.parse(exercise.extra ? exercise.extra.concat(code) : code);
     const tester = new Tester(ast, interpreterConfig);
-    const tests = parser.parse(exercise.test);
-    const testResults = tester.test(tests);
+    const testResults = tester.test(parser.parse(exercise.test));
+    setResults(testResults);
 
     if (resultStatus(testResults) === "passed") {
-      const analyzer = new Analyzer();
-      // Expectations example:
-      // [
-      //   {
-      //     "args": [{ "name": "cantidadDiasEnero" }],
-      //     "inspection": "HasBinding",
-      //     "expected": true
-      //   }
-      // ]
-      const expectationResults = analyzer.analyze(
-        ast,
-        exercise.expectations || [],
-      );
+      const analyzer = new Analyzer()
+      const adapter = new MulangAdapter()
+      const expectations = exercise.expectations.map((exp) => adapter.translateMulangInspection(exp)) || []
+      const expectationResults = analyzer.analyze(ast, expectations);
+      console.log(expectationResults)
       setExpectations(expectationResults);
     }
-
-    setResults(testResults);
+  } catch (err) {
+    setError(err instanceof Error ? err : new Error(String(err)));
+  } finally {
     setProcessing(false);
-  };
+  }
+};
 
   const currentProgressStatus = resultStatus(results || []);
   progress[Number(exerciseId) - 1] = {
@@ -249,7 +196,7 @@ const Exercise: React.FC = () => {
       lesson={lesson}
       exercise={exercise}>
       <ContentTitle>
-        {t("exerciseTitle", { number: 8, name: exercise.name })}
+        {t("exerciseTitle", { number: Number(exerciseId), name: exercise.name })}
       </ContentTitle>
 
       {/* TODO: Save the progress? */}
@@ -262,61 +209,58 @@ const Exercise: React.FC = () => {
           showHint={showHint}
         />
 
-        <div className={`border rounded ${layout.text[exercise.layout]}`}>
-          <div className="flex justify-between items-center border-b px-3 py-2">
-            <div className="font-semibold">✏️ {t("solution")}</div>
-            <div className="flex gap-3 text-gray-600">
-              <button
-                onClick={() => setFullscreen(!fullscreen)}
-                title={t("fullscreen")}>
-                ⛶
-              </button>
-              <button
-                onClick={() =>
-                  editorRef.current
-                    ?.getAction("editor.action.formatDocument")
-                    ?.run()
-                }
-                title={t("format")}>
-                ⇥
-              </button>
-              <button
-                onClick={() => setCode(exercise.defaultCode ?? "")}
-                title={t("restart")}>
-                ↺
-              </button>
+        <div
+          className={`flex flex-col gap-4 rounded ${layout.text[exercise.layout]}`}>
+          <div className="flex border flex-col">
+            <div className="flex justify-between items-center border-b px-3 py-2">
+              <div className="font-semibold">✏️ {t("solution")}</div>
+              <div className="flex gap-3 text-gray-600">
+                <button
+                  onClick={() => setFullscreen(!fullscreen)}
+                  title={t("fullscreen")}>
+                  ⛶
+                </button>
+                <button
+                  onClick={() =>
+                    editorRef.current
+                      ?.getAction("editor.action.formatDocument")
+                      ?.run()
+                  }
+                  title={t("format")}>
+                  ⇥
+                </button>
+                <button
+                  onClick={() => setCode(exercise.defaultCode ?? "")}
+                  title={t("restart")}>
+                  ↺
+                </button>
+              </div>
             </div>
-          </div>
 
-          <Editor
-            height={fullscreen ? "calc(100vh - 220px)" : "300px"}
-            language="haskell"
-            theme="vs-light"
-            value={code}
-            onChange={(v) => setCode(v ?? "")}
-            onMount={handleEditorMount}
-            options={{ minimap: { enabled: false }, wordWrap: "on" }}
-          />
-
-          <div className="p-4">
-            <SubmitButton onClick={submit} disabled={processing} />
+            <Editor
+              height={fullscreen ? "calc(100vh - 220px)" : "300px"}
+              language="haskell"
+              theme="vs-light"
+              value={code}
+              onChange={(v) => setCode(v ?? "")}
+              onMount={handleEditorMount}
+              options={{ minimap: { enabled: false }, wordWrap: "on" }}
+            />
           </div>
+          <SubmitButton onClick={submit} disabled={processing} />
         </div>
       </div>
 
-      {results && (
-        <div className="mt-8">
-          <ExerciseResult reports={results} />
-          <ExpectationResult expectations={expectations || []} />
-          <NextButton
-            nextExercise={nextExercise}
-            onClick={() => {
-              setProcessing(false);
-              setResults(null);
-            }}
-          />
-        </div>
-      )}
+      <div className="mt-8">
+        <Feedback results={results} expectations={expectations} error={error} />
+        <NextButton
+          nextExercise={nextExercise}
+          onClick={() => {
+            setProcessing(false);
+            setResults(null);
+          }}
+        />
+      </div>
     </Main>
   );
 };
