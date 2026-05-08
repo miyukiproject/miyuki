@@ -14,9 +14,6 @@ import { ProgressBar } from "./ProgressBar";
 import { ContentTitle } from "./Title";
 import Feedback from "./Feedback";
 
-type FeedbackData = Record<string, string>
-const populate = (template: string, data: FeedbackData) => template.replace(/\${(\w+)}/g, (_, key) => data[key]);
-
 const exerciseModules = import.meta.glob("../exercises/**/*", { eager: true });
 
 const interpreterConfig: InterpreterConfig = {
@@ -137,7 +134,7 @@ const Exercise: React.FC = () => {
     status: i < Number(exerciseId) ? "passed" : "pending",
   }));
 
-  const [code, setCode] = useState<string>(exercise.defaultCode ?? "");
+  const [code, setCode] = useState<string>(exercise.default_content ?? "");
   const [showHint, setShowHint] = useState<boolean>(false);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [results, setResults] = useState<TestReport[] | null>(null);
@@ -171,7 +168,6 @@ const submit = () => {
       const adapter = new MulangAdapter()
       const expectations = exercise.expectations.map((exp) => adapter.translateMulangInspection(exp)) || []
       const expectationResults = analyzer.analyze(ast, expectations);
-      console.log(expectationResults)
       setExpectations(expectationResults);
     }
   } catch (err) {
@@ -230,7 +226,7 @@ const submit = () => {
                   ⇥
                 </button>
                 <button
-                  onClick={() => setCode(exercise.defaultCode ?? "")}
+                  onClick={() => setCode(exercise.default_content ?? "")}
                   title={t("restart")}>
                   ↺
                 </button>
