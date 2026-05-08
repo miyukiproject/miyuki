@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "mumuki-skyblue": "#3498DB",
         "mumuki-rose": "#ff5b81",
         "mumuki-rose-darken": "#d94d6e"
       }
