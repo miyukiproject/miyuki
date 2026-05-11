@@ -111,6 +111,7 @@ const Assignment: React.FC<{
 type HintBoxProps = {
   hint: string;
 };
+
 const HintBox = ({ hint }: HintBoxProps) => (
   <div className="mb-5">
     <Description className="p-3">
