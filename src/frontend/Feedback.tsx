@@ -143,6 +143,7 @@ const TestReportItem = (report: TestReport) =>
 type ErrorFeedbackProps = {
   error: Error;
 };
+
 const ErrorFeedback = ({ error }: ErrorFeedbackProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
 
@@ -161,6 +162,7 @@ const ErrorFeedback = ({ error }: ErrorFeedbackProps) => {
 type TestsFeedbackProps = {
   results: TestReport[];
 };
+
 const TestsFeedback = ({ results }: TestsFeedbackProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
   return (
@@ -182,6 +184,7 @@ type ExpectationResultProps = {
   index: number;
   passed: boolean;
 };
+
 const ExpectationResult = ({ rule, index, passed }: ExpectationResultProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
 
@@ -211,6 +214,7 @@ const ExpectationResult = ({ rule, index, passed }: ExpectationResultProps) => {
 type ExpectationsFeedbackProps = {
   expectations: AnalysisResult[];
 };
+
 const ExpectationsFeedback = ({ expectations }: ExpectationsFeedbackProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
   return (
