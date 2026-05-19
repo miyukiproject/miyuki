@@ -81,10 +81,14 @@ const TestReportItem = (report: TestReport) =>
     <TestReportRow {...report} />
   );
 
-const ErrorFeedback = (error: Error) => {
+type ErrorFeedbackProps = {
+  error: Error;
+};
+
+const ErrorFeedback = ({ error }: ErrorFeedbackProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
 
-  <FeedbackContainer color={"red"}>
+  return <FeedbackContainer color={"red"}>
     <FeedbackTitle
       heading={t("errored")}
       color={"red"}
@@ -94,7 +98,11 @@ const ErrorFeedback = (error: Error) => {
   </FeedbackContainer>;
 };
 
-const TestsFeedback = (results: TestReport[]) => {
+type TestsFeedbackProps = {
+  results: TestReport[];
+};
+
+const TestsFeedback = ({ results }: TestsFeedbackProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
   return (
     <FeedbackContainer color={"red"}>
@@ -110,11 +118,13 @@ const TestsFeedback = (results: TestReport[]) => {
   );
 };
 
-const ExpectationResult = (
-  rule: InspectionRule,
-  index: number,
-  passed: boolean,
-) => {
+type ExpectationResultProps = {
+  rule: InspectionRule;
+  index: number;
+  passed: boolean;
+};
+
+const ExpectationResult = ({ rule, index, passed }: ExpectationResultProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
 
   const { inspection, args, binding, expected, targetSuffix, matcher } = rule;
@@ -140,7 +150,11 @@ const ExpectationResult = (
   );
 };
 
-const ExpectationsFeedback = (expectations: AnalysisResult[]) => {
+type ExpectationsFeedbackProps = {
+  expectations: AnalysisResult[];
+};
+
+const ExpectationsFeedback = ({ expectations }: ExpectationsFeedbackProps) => {
   const { t } = useTranslation(["translation", "yukigo"]);
   return (
     <FeedbackContainer color={"yellow"}>
@@ -150,9 +164,9 @@ const ExpectationsFeedback = (expectations: AnalysisResult[]) => {
         icon={<WarningIcon width={20} height={20} className="fill-yellow-700" />}
       />
       <div className="bg-white border rounded p-3 text-sm font-mono">
-        {expectations.map(({ rule, passed }, index) =>
-          ExpectationResult(rule, index, passed),
-        )}
+        {expectations.map(({ rule, passed }, index) => (
+          <ExpectationResult rule={rule} index={index} passed={passed} />
+        ))}
       </div>
     </FeedbackContainer>
   );
@@ -161,7 +175,7 @@ const ExpectationsFeedback = (expectations: AnalysisResult[]) => {
 const SuccessFeedback = () => {
   const { t } = useTranslation(["translation", "yukigo"]);
 
-  <FeedbackContainer color={"green"}>
+  return <FeedbackContainer color={"green"}>
     <FeedbackTitle
       heading={t("passed")}
       color={"green"}
@@ -173,12 +187,12 @@ const SuccessFeedback = () => {
 export default function Feedback({ results, expectations, error }: Props) {
   if (!results && !expectations && !error) return <></>;
 
-  if (error) return ErrorFeedback(error);
+  if (error) return <ErrorFeedback error={error} />;
 
-  if (results && !testsOk(results)) TestsFeedback(results);
+  if (results && !testsOk(results)) return <TestsFeedback results={results} />;
 
   if (expectations && !expectationsOk(expectations))
-    return ExpectationsFeedback(expectations);
+    return <ExpectationsFeedback expectations={expectations} />;
 
-  return SuccessFeedback();
+  return <SuccessFeedback />;
 }

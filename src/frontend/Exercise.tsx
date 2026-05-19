@@ -161,7 +161,18 @@ const Exercise: React.FC = () => {
 
   const editorRef = useRef<any>(null);
 
-  const handleEditorMount: OnMount = (editor) => {
+  const handleEditorMount: OnMount = (editor, monaco) => {
+    editor.addCommand(
+      monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyV,
+      async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          editor.trigger("keyboard", "type", { text });
+        } catch (err) {
+          console.warn("Fallo lectura del clipboard:", err);
+        }
+      }
+    );
     editorRef.current = editor;
   };
 
