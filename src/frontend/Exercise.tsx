@@ -13,6 +13,7 @@ import { Exercise as ExerciseModel } from "./model/guide";
 import { ProgressBar } from "./ProgressBar";
 import { ContentTitle } from "./Title";
 import Feedback from "./Feedback";
+import { LightbulbIcon } from "./icons/Icons";
 
 type FeedbackData = Record<string, string>
 const populate = (template: string, data: FeedbackData) => template.replace(/\${(\w+)}/g, (_, key) => data[key]);
@@ -95,19 +96,29 @@ const Assignment: React.FC<{
       {exercise.hint && (
         <button
           onClick={() => setShowHint(!showHint)}
-          className="text-blue-600 flex items-center gap-2 mb-2">
-          💡 {t("needAHint")}
+          className="text-mumuki-skyblue flex items-center gap-2 mb-2 hover:underline">
+          <LightbulbIcon width={16} height={16} />
+          {t("needAHint")}
         </button>
       )}
 
-      {showHint && (
-        <div className="bg-blue-50 border border-blue-200 p-3 rounded">
-          {exercise.hint}
-        </div>
-      )}
+      {showHint && <HintBox hint={exercise.hint} />}
     </div>
   );
 };
+
+
+type HintBoxProps = {
+  hint: string;
+};
+
+const HintBox = ({ hint }: HintBoxProps) => (
+  <div className="mb-5">
+    <Description className="p-3">
+      {hint}
+    </Description>
+  </div>
+);
 
 const layout = {
   text: {
