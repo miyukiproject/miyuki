@@ -142,7 +142,7 @@ const Exercise: React.FC = () => {
 
           <div
             className={`flex flex-col gap-4 rounded ${layout.text[exercise.layout]}`}>
-            <div className="flex border flex-col">
+            <div className="flex flex-col">
               <PlaygroundHeader />
               <CodePlayground />
             </div>
