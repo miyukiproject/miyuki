@@ -224,6 +224,8 @@
   "toggleRead": "Marcar como leído/no leído",
   "total": "Total",
   "uncategorized": "No categorizado",
+  "unexpectedErrorMessage": "Se ha producido un error inesperado en la aplicación.",
+  "unexpectedErrorTitle": "¡Ups! Algo salió mal",
   "unmeetExpectations": "Objetivos que no se cumplieron",
   "unpreparedOrganizationExplanation": "Este recorrido aún no ha comenzado",
   "unspecified": "Prefiero no decirlo",
