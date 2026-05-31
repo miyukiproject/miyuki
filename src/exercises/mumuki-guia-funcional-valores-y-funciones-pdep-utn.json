@@ -1,0 +1,467 @@
+{
+  "corollary": "Acabás de conocer los elementos básicos del paradigma funcional y del lenguaje Haskell. Ahora sabés qué es un valor, qué es una etiqueta o alias, y el hechos de que las etiquetas no pueden utilizarse para más de un valor.\n\nTambién conocimos las funciones y la composición de funciones, la cual es posible gracias a que **las funciones son valores**.\n\nEsto recién es la punta del iceberg. Hay mucho más por aprender. ¡Acompañanos!\n",
+  "extra": "",
+  "beta": true,
+  "expectations": [
+    {
+      "binding": "*",
+      "inspection": "Except:HasRedundantParameter"
+    }
+  ],
+  "type": "learning",
+  "authors": "Franco Leonardo Bulgarelli, Gustavo Trucco, Mumuki Project",
+  "id": 1,
+  "private": true,
+  "teacher_info": "",
+  "sources": "",
+  "settings": {},
+  "custom_expectations": "",
+  "name": "Valores y Funciones",
+  "description": "¡Te damos la bienvenida! \n\nEl paradigma funcional es una forma de resolver problemas de programación bastante antigua: [sus orígenes](https://es.wikipedia.org/wiki/C%C3%A1lculo_lambda) se remontan al 1930, cuando ni siquiera existían las computadoras.\n\nY aunque estas ideas fueron desarrolladas por matemáticos, la buena noticia es que no hay que saber nada de matemática para poder entenderlo y aprovecharlo... bueno, bueno, capaz saber sumar y multiplicar nos sea útil :stuck_out_tongue:\n\nAh, ¿y sabés que es lo mejor? Que este paradigma es **muy simple**, pero te permite hacer **cosas muy poderosas**: con muy poquitas herramientas podés hacerlo todo. Por eso decimos que _funcional_ te permite **dominar al mundo con nada**.\n\nSuficiente introducción por ahora, ¡empecemos a programar en _funcional_, utilizando el lenguaje de programación Haskell! ¡Acompañanos!\n\n",
+  "locale": "es",
+  "slug": "mumukiproject/mumuki-guia-funcional-valores-y-funciones-pdep-utn",
+  "exercises": [
+    {
+      "name": "Paradigmas... ¿para qué?",
+      "locale": "es",
+      "layout": "input_bottom",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": 0,
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 1103,
+      "type": "reading",
+      "settings": {},
+      "description": "En el mundo existen muchas formas distintas de entender la realidad, y eso deriva en formas diferentes de solucionar un mismo problema. En el mundo de la programación pasa lo mismo.\n\nEn este video te contamos qué son los _**paradigmas de programación**_ y, en particular, en qué consiste el _paradigma funcional_.\n\n\n\u003ciframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/A9XaRk0eOHM?ecver=1\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen\u003e\u003c/iframe\u003e"
+    },
+    {
+      "name": "Los números",
+      "locale": "es",
+      "corollary": "¡Bien hecho!  :clap: :clap:\n\nEntendamos lo que hiciste: **creaste el alias** `cantidadDiasEnero` para el **valor** 31.\n\n¿Valores? ¿alias? Veamos mejor qué son estas cosas....",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "teacher_info": "",
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 100,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "Empecemos por lo simple: los números. En Haskell tenemos números como el `4`, el `1.5` (que en español se lee _1,5_) , el `-89` o el `200139`.\n\n¡Podemos tener números tan chicos o grandes como queramos!\n\n¿Y qué podemos hacer con un número? Por un lado, podemos ponerle una etiqueta o alias, para indicar qué representa. Por ejemplo, si en un programa Haskell querés decir que la semana tiene 7 días, podés escribir:\n\n```haskell\ncantidadDeDiasPorSemana = 7\n```\n\nY si querés decir que el [sistema solar tiene 8 planetas](https://es.wikipedia.org/wiki/Sistema_solar), podés escribir:\n\n```haskell\ncantidadDePlanetasSistemaSolar = 8\n```\n\n\u003e Intentalo vos mismo: escribí un programa Haskell que diga que `cantidadDiasEnero` es 31.",
+      "test": "describe \"cantidadDiasEnero\" $ do\n  it \"es igual a 31\" $ do\n    cantidadDiasEnero `shouldBe` 31\n",
+      "expectations": [
+        {
+          "args": [],
+          "binding": "cantidadDiasEnero",
+          "inspection": "HasBinding",
+          "expected": true
+        }
+      ]
+    },
+    {
+      "name": "Valores y alias",
+      "locale": "es",
+      "corollary": "¡Perfecto, perfecto!\n\nEs importante entender que si bien estos dos programas resuelven el problema:\n\n```haskell\ncantidadRuedasBicicleta = 2\ncantidadRuedasMoto = 2\n```\n\ny\n\n```haskell\ncantidadRuedasBicicleta = 2\ncantidadRuedasMoto = cantidadRuedasBicicleta\n```\n\nEl segundo tiene la ventaja de que te permite olvidar de qué cantidad de ruedas tiene la bicicleta, y concentrarte en la regla de que la cantidad de ruedas de la moto y bicicleta son las mismas.\n\nQuizás en programas muy simples como este no notes gran beneficio, pero a medida que las cosas se vuelvan más complicadas, estos detalles se vuelven fundamentales.",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "teacher_info": "",
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 200,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "En haskell podemos darles alias a múltiples valores.\n\nPor ejemplo, para escribir un programa en el cual definimos la edad de Analia y la de Maria, lo hacemos de la siguiente forma:\n\n```haskell\nedadAnalia = 12\nedadMaria = 8\n```\nY además, podemos utilizarlas en cualquier otro lugar:\n\n```haskell\nedadErnesto = edadAnalia\n```\n\n(con lo que estamos diciendo que la edad de Ernesto es la misma que la de Analía, quizás porque son mellizos)\n\nUna vez que utilizamos un alias para un valor, no podemos utilizarlo otro. Es decir **los alias son únicos**.\n\nAh, algo más: es importante que nuestro alias sea _expresivo_, es decir, que dé una buena idea sobre lo que representa. Por ejemplo, si un alias representa cuánto dinero tiene Ana, no lo llames `din`, `numerito`, `x` o `ana`; llamalo, por ejemplo `patrimonioAna` :sunglasses:\n\n\u003e Ahora te toca a vos: declará el alias `cantidadRuedasBicicleta`. También declará el alias `cantidadRuedasMoto`, que tiene la misma cantidad de ruedas que la bicicleta.\n\n\n",
+      "test": "describe \"cantidadRuedasBicicleta\" $ do\n  it \"es igual a 2\" $ do\n    cantidadRuedasBicicleta `shouldBe` 2\n\ndescribe \"cantidadRuedasMoto\" $ do\n  it \"es igual a cantidadRuedasBicicleta\" $ do\n    cantidadRuedasMoto `shouldBe` cantidadRuedasBicicleta\n",
+      "expectations": [
+        {
+          "binding": "cantidadRuedasBicicleta",
+          "inspection": "HasBinding",
+          "args": [],
+          "expected": true
+        },
+        {
+          "binding": "cantidadRuedasMoto",
+          "inspection": "HasBinding",
+          "args": [],
+          "expected": true
+        },
+        {
+          "binding": "cantidadRuedasMoto",
+          "inspection": "HasUsage",
+          "args": ["cantidadRuedasBicicleta"],
+          "expected": true
+        }
+      ],
+      "custom_expectations": ""
+    },
+    {
+      "name": "Más valores",
+      "locale": "es",
+      "corollary": "Moraleja: en Haskell **todo lo que puede ser etiquetado**, es decir, a todo lo que le podemos poner un alias, **es un valor**.\n\nY valores, hay de muchos *tipos*: números, booleanos, strings, entre otros.\n\nAh, ¿sabés algo loco? Pronto veremos que en Haskell ¡casi todo es un valor! :open_mouth:\n\nBueno, ya hablamos bastante de valores y alias, ¡ahora vayamos a algo más interesante!\n\n",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "teacher_info": "",
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 300,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "El mundo funcional sería bastante aburrido si sólo tuvieramos números. Así que hay muchos más tipos de valores; por ejemplo:\n\n * los _booleanos_: `True`, `False` (ojo, van con la primera letra mayúsculas)\n * los _strings_: `\"Hola Mundo!\"`,  `\"Duro de Matar 4\"`, `\"Volver al futuro\"`\n\nY como son valores, ¡podemos etiquetarlos como siempre!\n\n```haskell\npeliculaFavoritaFlorencia = \"Star Wars Episodio 5\"\nmarioTienePerro = True\n```\n\n\n\u003e Ahora te toca a vos: escribí un programa que diga que Mario no tiene gato, y que la película favorita de Ana es Gladiador",
+      "hint": "¿No sabés qué alias utilizar? ¡Inspirate en el último ejemplo!",
+      "test": "describe \"peliculaFavoritaAna\" $ do\n  it \"es \\\"Gladiador\\\"\" $ do\n    peliculaFavoritaAna `shouldBe` \"Gladiador\"\n\ndescribe \"marioTieneGato\" $ do\n  it \"es False\" $ do\n    marioTieneGato `shouldBe` False\n\n\n",
+      "expectations": [
+        {
+          "binding": "peliculaFavoritaAna",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "marioTieneGato",
+          "inspection": "HasBinding"
+        }
+      ]
+    },
+    {
+      "name": "Las Funciones",
+      "locale": "es",
+      "corollary": "¡Bien! :clap: :clap:\n\nEntendamos qué hicimos; declaramos esta vez una función, parecida a ésta:\n\n```haskell\nanterior numero = numero - 1\n```\n\nLa función se llama `anterior`: una caja negra que toma un `numero` a su entrada, y coloca ese número menos 1 a la salida.\n\nA la entrada de una función se la conoce como **parámetro**, y a la salida como **retorno** (ó **imagen**). En este caso el `numero` es el parámetro y el retorno o imagen es `numero - 1`.\n\nY finalmente cuando **apliquemos** a `anterior`, por ejemplo, con el valor 3, obtendremos como salida el valor 2.\n",
+      "layout": "input_bottom",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "teacher_info": "",
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 400,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "Estamos aprendiendo sobre el paradigma **funnnnnn**cional... ¡adiviná cuál es otro elemento fundamental del paradigma! ¡Las funciones!\n\nLa idea es simple: una función es una **caja negra**, a la que entra algo, y de la que sale otra cosa:\n\n![blackbox.png](https://raw.githubusercontent.com/pdep-utn/mumuki-funcional-guia-0/master/images/colorbox.png)\n\nPor ejemplo, una función muy simple es la que calcula el _siguiente_ de un número, esto es, el número original más 1:\n\n![blackbox_succ.png](https://raw.githubusercontent.com/pdep-utn/mumuki-funcional-guia-0/master/images/colorbox_succ.png)\n\nA una función podemos ponerle a su entrada un valor, lo que se conoce como **aplicar la función**, y al hacerlo obtenemos una salida correspondiente. Veamos ejemplos: si a esta función `siguiente` la aplicamos con:\n\n* el número 1, obtendremos a su salida el numero 2\n* el número 10, obtendremos a su salida el numero 11\n* etc\n\n¿Fácil, no? En Haskell esta función se escribe así:\n\n```haskell\nsiguiente numero = numero + 1\n```\n\n\u003e ¿Te imaginás cómo se escribirá una función que calcule el anterior, es decir, el número de la entrada, menos 1? ¡Escribilo!\n",
+      "test": "describe \"anterior\" $ do\n  it \"anterior de 4 es 3\" $ do\n    anterior 4 `shouldBe` 3\n\n  it \"anterior de 40 es 39\" $ do\n    anterior 4 `shouldBe` 3\n\n  it \"anterior de 0 es (-1)\" $ do\n    anterior 0 `shouldBe` (-1)\n",
+      "expectations": [
+        {
+          "binding": "anterior",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "anterior",
+          "inspection": "Uses:-"
+        }
+      ],
+      "custom_expectations": ""
+    },
+    {
+      "name": "Más funciones",
+      "locale": "es",
+      "corollary": "Ya vamos entendiendo cómo declarar funciones simples como el doble y el cuadrado.\n\nLo interesante de funcional es que vamos a construir funciones complejas a partir de funciones simples, combinándolas apropiadamente. ¡Veamos como hacer esto!",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "teacher_info": "",
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 500,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "Ahora te toca a vos, escribí las siguientes dos funciones:\n\n* `doble`: que toma un número y devuelve su doble:\n\n![blackbox.png](https://raw.githubusercontent.com/pdep-utn/mumuki-funcional-guia-0/master/images/colorbox_double.png)\n\n* `cuadrado`: que toma un número y devuelve su cuadrado\n\n![blackbox.png](https://raw.githubusercontent.com/pdep-utn/mumuki-funcional-guia-0/master/images/colorbox_square.png)\n",
+      "hint": "* Para multiplicar, contamos con el _operador_ `*`.\n* El cuadrado de un número se lo obtiene multiplicando al número por sí mismo.\n  * Otra forma, más avanzada, es utilizando el operador `^`, que eleva un número a una potencia.",
+      "test": "describe \"\" $ do\n  it \"doble de 2 es 4\" $ do\n    doble 2 `shouldBe` 4\n\n  it \"doble de 4 es 8\" $ do\n    doble 2 `shouldBe` 4\n\n  it \"doble de 13 es 26\" $ do\n    doble 2 `shouldBe` 4\n\n  it \"cuadrado de 2 es 4\" $ do\n    cuadrado 2 `shouldBe` 4\n\n  it \"cuadrado de 3 es 9\" $ do\n    cuadrado 3 `shouldBe` 9\n\n  it \"cuadrado de 1 es 1\" $ do\n    cuadrado 1 `shouldBe` 1\n\n  it \"cuadrado de 10 es 100\" $ do\n    cuadrado 10 `shouldBe` 100\n",
+      "expectations": [
+        {
+          "binding": "doble",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "doble",
+          "inspection": "Uses:*"
+        },
+        {
+          "binding": "cuadrado",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "*",
+          "inspection": "Except:HasRedundantParameter"
+        }
+      ],
+      "custom_expectations": ""
+    },
+    {
+      "name": "Los booleanos",
+      "locale": "es",
+      "corollary": "Podemos sacar algunas conclusiones:\n\n1. En Haskell tenemos operadores como el mayor `\u003e`, el menor `\u003c` y el menor o igual `\u003c=`, que sirven para comparar números.\n2. Los números negativos tenemos que escribirlos entre paréntesis. ¡Cosas raras de Haskell!",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 600,
+      "type": "problem",
+      "settings": {},
+      "description": "No todo en funcional son números, también hay valores de verdad: `True` que representa algo que es verdadero, y `False` que representa algo que es falso.\n\nPor ejemplo, supongamos que necesitamos una función que dice si un número es positivo. Podemos escribirla así:\n\n```haskell\nesPositivo numero = numero \u003e 0\n```\n\nSi la aplicamos con el valor 10:\n\n```haskell\nesPositivo 10\n```\n\nel resultado será `True`. Y si la aplicamos con el valor (-5):\n\n```haskell\nesPositivo (-5)\n```\n\nel resultado será `False`.\n\n\n\u003e Ahora te toca a vos: declará la función `esNegativo`, que dice si un número es menor a cero.",
+      "test": "describe \"es negativo\" $ do\n  it \"esNegativo 4 es False\" $ do\n    esNegativo 4 `shouldBe` False\n\n  it \"esNegativo 0 es False\" $ do\n    esNegativo 0 `shouldBe` False\n\n  it \"esNegativo (-4) es True\" $ do\n    esNegativo (-4) `shouldBe` True\n",
+      "expectations": [
+        {
+          "binding": "esNegativo",
+          "inspection": "HasBinding"
+        }
+      ]
+    },
+    {
+      "name": "Múltiples parámetros",
+      "locale": "es",
+      "corollary": "Fantástico, ya ves que definir funciones de cualquier cantidad de parámetros es fácil: ponés tantos parámetros como necesitás, separados por espacios, y los usás.\n\nLas funciones, entonces, pueden tomar uno o más parámetros, y siempre devuelven un sólo valor.\n\nY para aplicar una funcion, pasás los argumentos tambien separados por espacios.",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 650,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "Ahora nos topamos con un problema nuevo: queremos calcular el perímetro de un rectángulo.\n\nLa fórmula de hacer esto es muy simple: dos veces la longitud del lado mayor, más dos veces la longitud del lado menor. Lo cual no es nada del otro mundo, pero implica pasar dos parámetros en lugar de uno a la función. Lo cual se hace dejando un espacio entre ellos como vemos en este ejemplo:\n\n```haskell\nperimetroRectangulo lado1 lado2 = 2 * lado1 + 2 * lado2\n```\n\nAhora hay que aplicar la función con dos parámetros, por ejemplo:\n\n```haskell\nム perimetroRectangulo 10 2\n24\n```\n\n\u003e ¿Te imaginás cómo se puede escribir la función `areaRectangulo` que calcule el área de un rectángulo? ¡Escribila!\n\n\n\n\n\n",
+      "hint": "El área de un rectángulo se calcula multiplicando el lado mayor por el lado menor.",
+      "test": "describe \"\" $ do\n  it \"areaRectangulo 3 4 es 12\" $ do\n    areaRectangulo 3 4 `shouldBe` 12\n\n  it \"areaRectangulo 10 8 es 80\" $ do\n    areaRectangulo 10 8 `shouldBe` 80\n\n  it \"areaRectangulo 1 4 es 4\" $ do\n    areaRectangulo 1 4 `shouldBe` 4\n\n",
+      "expectations": [
+        {
+          "binding": "areaRectangulo",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "*",
+          "inspection": "Except:HasRedundantParameter"
+        }
+      ]
+    },
+    {
+      "name": "Triángulos",
+      "locale": "es",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 675,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "Ahora te toca a vos: declará una función `perimetroTriangulo`, que calcule.... adiviná... el perímetro de un triángulo :stuck_out_tongue:\n",
+      "hint": "El perímetro de un triángulo es la suma de sus tres lados.",
+      "test": "describe \"\" $ do\n  it \"perimetroTriangulo 3 4 2 es 9\" $ do\n    perimetroTriangulo 3 4 2 `shouldBe` 9\n\n  it \"perimetroTriangulo 1 1 1 es 3\" $ do\n    perimetroTriangulo 1 1 1 `shouldBe` 3\n\n  it \"perimetroTriangulo 1 2 1 es 4\" $ do\n    perimetroTriangulo 1 2 1 `shouldBe` 4",
+      "expectations": [
+        {
+          "binding": "perimetroTriangulo",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "*",
+          "inspection": "Except:HasRedundantParameter"
+        }
+      ]
+    },
+    {
+      "name": "Combinando funciones",
+      "locale": "es",
+      "corollary": "En _funcional_ nuestros programas se van a construir a partir de funciones pequeñas, que iremos combinando para formar funciones más grandes y que hagan cosas más interesantes por nosotros.\n\nEsta idea de separar el problema en partes mas chicas se conoce como _dividir y conquistar_. Y para lograrlo, tenemos que aprender a **delegar**: no intentar hacer todo en una sola función, sino _patearle la pelota_ :soccer: a otras funciones.\n\n",
+      "layout": "input_bottom",
+      "tag_list": [],
+      "extra_visible": true,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 700,
+      "type": "problem",
+      "settings": {},
+      "description": "Supongamos ahora que queremos tener una función, que toma un número por parámetro, y le suma uno y luego lo multiplica por 2. Ciertamente podríamos escribir lo siguiente:\n\n```haskell\ndobleDelSiguiente numero = (numero + 1) * 2\n```\n\n¡Y funciona! Pero nosotros ya definimos antes funciones que hacen las partes mas chicas del problema: `doble` y `siguiente`. Entonces, podemos pensar que la caja negra `dobleDelSiguiente`:\n\n\n![blackbox.png](https://raw.githubusercontent.com/pdep-utn/mumuki-funcional-guia-0/master/images/colorbox_succ_double.png)\n\nse puede pensar así:\n\n![blackbox.png](https://raw.githubusercontent.com/pdep-utn/mumuki-funcional-guia-0/master/images/colorbox_succ_double_composition.png)\n\nLo cual escribimos de esta forma:\n\n```haskell\nム dobleDelSiguiente numero = doble (siguiente numero)\n```\n\n\u003e ¿Te imaginás como será definir una función que calcule el doble del cuadrado? ¡Escribila!\n\u003e\n\u003e```haskell\n\u003eム dobleDelCuadrado 3\n\u003e18 --Porque 3 * 3 es 9, y el doble de 9 es 18\n\u003e```\n\u003e\n\u003e **Nota**: asumí que ya declaramos las funciones `doble` y `cuadrado`.\n\n\n\n",
+      "extra": "doble numero = numero * 2\n\ncuadrado numero = numero * numero",
+      "test": "describe \"\" $ do\n  it \"dobleDelCuadrado de 4 es 32\" $ do\n    dobleDelCuadrado 4 `shouldBe` 32\n\n  it \"dobleDelCuadrado de 2 es 8\" $ do\n    dobleDelCuadrado 2 `shouldBe` 8\n\n  it \"dobleDelCuadrado de 1 es 2\" $ do\n    dobleDelCuadrado 1 `shouldBe` 2\n\n  it \"dobleDelCuadrado de 10 es 200\" $ do\n    dobleDelCuadrado 10 `shouldBe` 200\n",
+      "expectations": [
+        {
+          "binding": "dobleDelCuadrado",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "dobleDelCuadrado",
+          "inspection": "HasUsage:doble"
+        },
+        {
+          "binding": "dobleDelCuadrado",
+          "inspection": "HasUsage:cuadrado"
+        },
+        {
+          "binding": "*",
+          "inspection": "Except:HasRedundantParameter"
+        }
+      ]
+    },
+    {
+      "name": "Composición",
+      "locale": "es",
+      "corollary": "¡Bien hecho!\n\nPor si quedaran dudas, `tripleDelAnterior` así declarada:\n\n```haskell\ntripleDelAnterior = triple.anterior\n```\n\nes exactamente lo mismo que decir\n\n```haskell\ntripleDelAnterior numero = triple (anterior numero)\n```\n\nPorque en ambos casos estamos diciendo \"al resultado de aplicar anterior, aplicale el triple\".\n\nPor tanto, las dos se usan igual:\n\n```haskell\ntripleDelAnterior 2\n```\n\nque devuelve `3 * (2-1)`, que es `3`.\n",
+      "layout": "input_bottom",
+      "tag_list": [],
+      "extra_visible": true,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 800,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "Interesante esto de definir funciones combinando otras, ¿no?\n\nAntes vimos un caso en el que una función grande es simplemente aplicar una función \"chica\", y al resultado, aplicarle otra función \"chica\":\n\n```haskell\ndobleDelSiguiente numero = doble (siguiente numero)\n```\n\nEsta idea de pasarle el resultado de una función a la entrada de otra es tan común que en funcional tiene un nombre: composición. Decimos que `dobleDelSiguiente` es la composición de `doble` con `siguiente`. Es más, podemos escribirlo de una forma cortita:\n\n```haskell\ndobleDelSiguiente = doble.siguiente\n```\n\nLo cual se lee como \"`dobleDelSiguiente` es `doble` compuesto con `siguiente`\". Es decir lo mismo, pero con menos rodeos. Haskell es así, tiene pocas vueltas :sunglasses:.\n\n\u003e Veamos si se entiende: escribí una función `tripleDelAnterior`, que es `triple` compuesto con `anterior`. Asumí que `triple` y `anterior` ya se encuentran definidas.\n\nAcá te dejamos un video para que veas lo que te contamos más arriba en funcionamiento: \n\n\u003ciframe width=\"640\" height=\"360\" src=\"https://www.youtube.com/embed/H6_zdXfUGSs\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen\u003e\u003c/iframe\u003e\n",
+      "extra": "anterior x = x - 1\n\ntriple = (3*)",
+      "test": "describe \"\" $ do\n  it \"tripleDelAnterior 4 es 9\" $ do\n    tripleDelAnterior 4 `shouldBe` 9\n\n  it \"tripleDelAnterior 1 es 0\" $ do\n    tripleDelAnterior 1 `shouldBe` 0\n\n  it \"tripleDelAnterior 10 es 27\" $ do\n    tripleDelAnterior 10 `shouldBe` 27",
+      "expectations": [
+        {
+          "binding": "tripleDelAnterior",
+          "inspection": "HasBinding"
+        },
+        {
+          "binding": "tripleDelAnterior",
+          "inspection": "HasComposition"
+        },
+        {
+          "binding": "tripleDelAnterior",
+          "inspection": "HasUsage:triple"
+        },
+        {
+          "binding": "tripleDelAnterior",
+          "inspection": "HasUsage:anterior"
+        },
+        {
+          "binding": "*",
+          "inspection": "Except:HasRedundantParameter"
+        }
+      ]
+    },
+    {
+      "name": "Más composición",
+      "locale": "es",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": true,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "teacher_info": "",
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 1101,
+      "type": "problem",
+      "settings": {},
+      "default_content": "",
+      "description": "¡Ahora te toca a vos! Definí la función `masDos`, usando la función `siguiente` y composición. ",
+      "extra": "siguiente numero = numero + 1",
+      "hint": "Pensá que el pedirle el siguiente al siguiente de un número es lo mismo que sumar dos. ",
+      "test": "it \"masDos de 1 es 3\" $ do \n   masDos 1 `shouldBe` 3\n   \nit \"masDos de 4 es 6\" $ do \n    masDos 4 `shouldBe` 6",
+      "expectations": [
+        {
+          "binding": "masDos",
+          "inspection": "HasComposition"
+        },
+        {
+          "binding": "masDos",
+          "inspection": "HasUsage:siguiente"
+        },
+        {
+          "binding": "*",
+          "inspection": "Except:HasWrongCaseIdentifiers"
+        }
+      ],
+      "custom_expectations": ""
+    },
+    {
+      "name": "Los operadores son funciones",
+      "locale": "es",
+      "corollary": "Una vuelta de tuerca: si los operadores son funciones, eso quiere decir que el operador de composición (el `.`) también es una función.\n\nY si la composición es una función, y toma por parámetro dos funciones... y los parámetros de las funciones son valores... eso quiere decir que.... ¡las funciones también son valores, al igual que los números y los booleanos! ¡Wow, todo un _[plot twist](https://es.wikipedia.org/wiki/Vuelta de tuerca (argumento))_!\n\nTrabajaremos más sobre esta idea en las próximas lecciones.\n",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 1100,
+      "type": "problem",
+      "settings": {},
+      "description": "Pasajeros, ¡ajústense los cinturones porque tiraremos una bomba! :bomb:\n\n¿Preparados? ¿Listos? Ahí va: los operadores que vimos antes, como la suma (`+`), resta (`-`), multiplicación (`*`), ¡son funciones! :boom:\n\nSolo que son un poco especiales, porque sus nombres no son una palabra (como lo es `siguiente`), sino un \"chirimbolo\".\n\nAdemás, mientras que\n\n  * las funciones comunes se aplican de forma _prefija_ (es decir, delante de sus argumentos): `siguiente numero`\n  * los operadores se utilizan de forma _infija_ (es decir, entre medio de sus argumentos): `3 + numero`\n\n¿No nos crees? Haskell nos permite también usar a los operadores de forma prefija, poniendo en evidencia que son funciones, si los ponemos entre paréntesis, así:\n\n```haskell\nsiguiente numero = (+) numero 1\n```\n\nAunque en general es más difícil de leer y por eso lo veníamos evitando, a veces esto nos permitirá salvar las papas del fuego.\n\n\u003e Veamos si se entiende: escribí la función doble, pero esta vez utilizando al operador `*` de forma prefija.\n\n",
+      "test": "describe \"\" $ do\n  it \"doble de 2 es 4\" $ do\n    doble 2 `shouldBe` 4\n\n  it \"doble de 4 es 8\" $ do\n    doble 2 `shouldBe` 4\n\n  it \"doble de 13 es 26\" $ do\n    doble 2 `shouldBe` 4",
+      "expectations": [
+        {
+          "binding": "doble",
+          "inspection": "HasBinding"
+        }
+      ]
+    },
+    {
+      "name": "\"Juguemos con strings\"",
+      "locale": "es",
+      "layout": "input_right",
+      "tag_list": [],
+      "extra_visible": false,
+      "manual_evaluation": false,
+      "editor": "code",
+      "assistance_rules": [],
+      "randomizations": {},
+      "choices": [],
+      "progressive_expectations": false,
+      "id": 1102,
+      "type": "problem",
+      "settings": {},
+      "description": "¡Haskell no vive sólo de números :wink:! Para cerrar, conozcamos algunas funciones para trabajar con strings:\n\n* `length` nos dice el largo de un string;\n* `head` nos devuelve el primer caracter (la primer letra) de un string;\n* `++` nos permite concatenar (unir) strings y es infija (como todos los chirimbolos que vimos).\n* `elem` nos dice si una letra (o cualquier caracter) forma parte de una palabra.\n\nVeamos ejemplos de todas ellas:\n\n```haskell\nム length \"seru giran\"\n10\n\nム head \"xilofon\"\n'x'\n\nム \"guarda\" ++ \"polvos\"\n\"guardapolvos\"\n\nム elem 'a' \"moto\"\nFalse\n\nム elem 't' \"pintura\"\nTrue\n```\n\n\u003e Hacé una función `cuantoMidenJuntos` que te diga cuánto miden dos strings concatenados. Por ejemplo: \n\u003e \n\u003e ```haskell\n\u003e ム cuantoMidenJuntos \"tres\" \"empanadas\"\n\u003e 13\n\u003e ```\n",
+      "test": "describe \"cuantoMidenJuntos\" $ do\n  it \"da 8 con \\\"hola\\\" y \\\"chau\\\"\" $ do\n    cuantoMidenJuntos \"hola\" \"chau\" `shouldBe` 8\n    \n  it \"da 11 con \\\"darth vader\\\" y \\\"\\\"\" $ do\n    cuantoMidenJuntos \"darth vader\" \"\" `shouldBe` 11",
+      "expectations": []
+    }
+  ],
+  "language": "haskell"
+}

@@ -1,8 +1,0 @@
-<div class="mu-form">
-  <% exercise.pretty_choices.each do |choice| %>
-    <div class="form-check">
-      <%= radio_button_tag :content, choice.value, checked?(choice, content), disabled: true, class: 'form-check-input mu-read-only-input' %>
-      <%= label_tag(choice.id, choice.text, class: 'form-check-label') %>
-    </div>
-  <% end %>
-</div>

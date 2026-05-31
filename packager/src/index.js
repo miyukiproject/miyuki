@@ -56,37 +56,43 @@ function startMiyuki() {
     return { action: "deny" };
   })
 
-  const dockerProcess = spawn("docker", [
-    'compose',
-    '-f', path.join(process.resourcesPath, 'docker', 'docker-compose.yml'),
-    '-f', path.join(process.resourcesPath, 'docker', `docker-compose.${miyukiDist}.yml`),
-    'up',
-    '-d'
-  ])
+  // TODO start runners
+  // const dockerProcess = spawn("docker", [
+  //   'compose',
+  //   '-f', path.join(process.resourcesPath, 'docker', 'docker-compose.yml'),
+  //   '-f', path.join(process.resourcesPath, 'docker', `docker-compose.${miyukiDist}.yml`),
+  //   'up',
+  //   '-d'
+  // ])
 
-  dockerProcess.stdout.on('data', (data) => {
-    sendLog(`[INFO] ${data.toString()}`);
-  });
+  // dockerProcess.stdout.on('data', (data) => {
+  //   sendLog(`[INFO] ${data.toString()}`);
+  // });
 
-  dockerProcess.stderr.on('data', (data) => {
-    sendLog(`[INFO] ${data.toString()}`)
-  });
+  // dockerProcess.stderr.on('data', (data) => {
+  //   sendLog(`[INFO] ${data.toString()}`)
+  // });
 
-  dockerProcess.on('error', (error) => {
-    sendLog(`[ERROR]: Error iniciando el subproceso: ${error.message}`);
-  });
+  // dockerProcess.on('error', (error) => {
+  //   sendLog(`[ERROR]: Error iniciando el subproceso: ${error.message}`);
+  // });
 
-  dockerProcess.on('close', (code) => {
-    if (code === 0) {
-      sendLog(`[SUCCESS]: Containers iniciados correctamente.`);
-      waitForServer("http://localhost:3000", () => {
-        sendLog("Aplicación lista, cargando...");
-        mainWindow.loadURL("http://localhost:3000");
-      });
-    } else {
-      sendLog(`[CRITIC]: Código de error: ${code}.`);
-    }
-  });
+  // dockerProcess.on('close', (code) => {
+  //   if (code === 0) {
+  //     sendLog(`[SUCCESS]: Containers iniciados correctamente.`);
+  //     waitForServer("http://localhost:3000", () => {
+  //       sendLog("Aplicación lista, cargando...");
+  //       mainWindow.loadURL("http://localhost:3000");
+  //     });
+  //   } else {
+  //     sendLog(`[CRITIC]: Código de error: ${code}.`);
+  //   }
+  // });
+
+  // TODO remove
+  mainWindow.webContents.openDevTools()
+  // TODO this won't probably work
+  mainWindow.loadFile(path.join(__dirname, '../miyuki-laboratory/index.html'));
 }
 
 function sendLog(message) {

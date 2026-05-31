@@ -8,13 +8,12 @@ https://user-images.githubusercontent.com/677436/230702139-114d099f-8ab7-4d71-be
 
 ## About
 
-This is a fork of mumuki-laboratory that:
+This is a re-write of mumuki-laboratory that:
 
-  * Freezes dependencies versions - miyuki is an [app, not an engine](https://guides.rubyonrails.org/engines.html)
   * Removes a lot of boilerplate and dark features
-  * Updates ruby and rails to 3.2 and 7, respectively
+  * Moved from ruby to typescript
   * Makes incognito mode work - current implementation had a lot of bugs and missing parts
-  * Uses `Sqlite3` instead of `PostgreSQL`
+  * Required no server-client database - just local storage!
   * Makes deployment easier
   * [Provides a desktop installer](./packager/README.md)
 
@@ -36,39 +35,34 @@ In order to better express and enforce those beliefs, we have:
   distributed alongside verbatim and modified copies of this software. It also offers mechanisms for new forks to extending this mechanism. Please read it [here](./LICENSE).
 
 
-## Local installation
-
-### Install environment
+## Install
 
 ```
-rbenv install
-bundle install
+npm install
 ```
 
-### Start the server
-
-This will start miyuki server only - required runners need to be started following by their own.
-
-```bash
-rails s
-```
-
-## Docker Installation
-
-### Prepare database
-
-In order to prepare database, follow the same instructions that with local installation.
-
-### Start the server from docker
-
-Again, this will start miyuki server **only**:
+## Start
 
 ```
-docker run -it --rm \
-           -p 3000:3000 \
-           -v ./db/development.sqlite3:/var/www/miyuki/db/production.sqlite3 \
-           flbulgarelli/miyuki-server
+npm run dev
 ```
+
+## Architecture
+
+* Content is 100% static, directly read from JSON files (TBD, may store in sqlite)
+* UI is built using react and typescript
+* Progress is stored in local storage
+
+
+## TODO
+
+Nearly everything
+
+* Use same node version as packager
+* Integrate with packages
+* Read content from files
+* Migrate the chapter UI
+
 
 ## Prebuilt distributions
 

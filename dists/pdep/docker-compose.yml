@@ -1,19 +1,5 @@
 version: "3"
 services:
-  ## ======
-  ## Server
-  ## ======
-
-  miyuki-server:
-    links:
-      - miyuki-haskell-runner
-      - miyuki-prolog-runner
-    volumes:
-      - ./development.sqlite3:/var/www/miyuki/db/production.sqlite3
-    depends_on:
-      - miyuki-haskell-runner
-      - miyuki-prolog-runner
-
   ## =======
   ## Runners
   ## =======
