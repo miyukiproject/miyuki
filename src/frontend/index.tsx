@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import ErrorBoundary from './ErrorBoundary';
 import reportWebVitals from './reportWebVitals';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
