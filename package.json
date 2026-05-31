@@ -16,6 +16,7 @@
     "i18next-http-backend": "^3.0.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-error-boundary": "^6.1.2",
     "react-i18next": "^16.5.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.10.1",
