@@ -1,71 +1,8 @@
-import {
-  useState,
-  useRef,
-  useEffect,
-  Ref,
-  Dispatch,
-  SetStateAction,
-  KeyboardEvent,
-} from "react";
-import { interpreterConfig, usePlayground } from "./PlaygroundContext";
-import { useTranslation } from "react-i18next";
+import { Dispatch, KeyboardEvent, Ref, SetStateAction, useState } from "react";
+import { interpreterConfig, usePlayground } from "../PlaygroundContext";
+import { Entry } from "./Console";
 import { YukigoHaskellParser } from "yukigo-haskell-parser";
 import { Interpreter } from "yukigo";
-
-type Entry = {
-  type: "command" | "output" | "error";
-  content: string;
-};
-
-export default function Console() {
-  const [history, setHistory] = useState<Entry[]>([]);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [history]);
-  return (
-    <div
-      className="flex flex-col h-[300px] bg-gray-100 text-mumuki-teal font-mono p-4 rounded-b shadow-inner overflow-hidden"
-      onClick={() => inputRef.current?.focus()}>
-      <ConsoleHistory scrollRef={scrollRef} history={history} />
-      <ConsoleInput
-        inputRef={inputRef}
-        history={history}
-        setHistory={setHistory}
-      />
-    </div>
-  );
-}
-
-type HistoryProps = {
-  scrollRef: Ref<HTMLDivElement>;
-  history: Entry[];
-};
-
-const ConsoleHistory = ({ scrollRef, history }: HistoryProps) => {
-  return (
-    <div
-      ref={scrollRef}
-      className="overflow-y-auto mb-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent">
-      {history.map((entry, i) => (
-        <div key={i} className="mb-1 break-all">
-          {entry.type === "command" && (
-            <span className="text-mumuki-teal mr-2">λ</span>
-          )}
-          {entry.type === "error" ? (
-            <span className="text-mumuki-rose-darken">{entry.content}</span>
-          ) : (
-            <span>{entry.content}</span>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
 
 type InputProps = {
   inputRef: Ref<HTMLInputElement>;
@@ -75,8 +12,7 @@ type InputProps = {
 
 type KeyHandler = (event: KeyboardEvent<HTMLInputElement>) => void;
 
-const ConsoleInput = ({ inputRef, history, setHistory }: InputProps) => {
-  const { t } = useTranslation();
+export const ConsoleInput = ({ inputRef, history, setHistory }: InputProps) => {
   const {
     code,
     exercise: { extra },

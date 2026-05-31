@@ -1,7 +1,7 @@
 import { PlayIcon } from "../icons/Icons";
 import { PlaygroundViews } from "../model/common";
 import Console from "./Console";
-import Editor from "./Editor";
+import Editor from "./Editor/Editor";
 import Library from "./Library";
 import { usePlayground } from "./PlaygroundContext";
 

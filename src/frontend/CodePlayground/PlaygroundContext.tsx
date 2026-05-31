@@ -44,7 +44,11 @@ export const usePlayground = () => {
     throw new Error("usePlayground debe usarse dentro de PlaygroundProvider");
   return context;
 };
-const baseResult: ExerciseResult = { tests: null, expectations: null, error: null };
+const baseResult: ExerciseResult = {
+  tests: null,
+  expectations: null,
+  error: null,
+};
 
 export const PlaygroundProvider: React.FC<{
   exercise: any;
@@ -114,7 +118,7 @@ export const PlaygroundProvider: React.FC<{
         setActiveView,
         exercise,
         submit,
-        reset
+        reset,
       }}>
       {children}
     </PlaygroundContext.Provider>

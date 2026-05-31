@@ -1,7 +1,8 @@
 import MonacoEditor, { OnMount } from "@monaco-editor/react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { usePlayground } from "./PlaygroundContext";
+import { usePlayground } from "../PlaygroundContext";
+import EditorButton from "./EditorButton";
 
 type Props = {};
 
@@ -11,7 +12,8 @@ export default function Editor({}: Props) {
 
   const [fullscreen, setFullscreen] = useState<boolean>(false);
 
-  const editorRef = useRef<any>(null);
+  // any deberia ser IStandaloneCodeEditor pero no puedo importarlo
+  const editorRef = useRef<any>(null); 
 
   const handleEditorMount: OnMount = (editor) => {
     editorRef.current = editor;
@@ -28,21 +30,23 @@ export default function Editor({}: Props) {
         options={{ minimap: { enabled: false }, wordWrap: "on" }}
       />
       <div className="flex flex-col text-gray-600">
-        <button
+        <EditorButton
+          title={t("fullscreen")}
+          icon={"⛶"}
           onClick={() => setFullscreen(!fullscreen)}
-          title={t("fullscreen")}>
-          ⛶
-        </button>
-        <button
+        />
+        <EditorButton
+          title={t("format")}
+          icon={"⇥"}
           onClick={() =>
             editorRef.current?.getAction("editor.action.formatDocument")?.run()
           }
-          title={t("format")}>
-          ⇥
-        </button>
-        <button onClick={() => setCode(exercise.default_content ?? "")} title={t("restart")}>
-          ↺
-        </button>
+        />
+        <EditorButton
+          title={t("restart")}
+          icon={"↺"}
+          onClick={() => setCode(exercise.default_content ?? "")}
+        />
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import { ContentTitle } from "./Title";
 import Feedback from "./Feedback";
 import { LightbulbIcon } from "./icons/Icons";
 import CodePlayground from "./CodePlayground/CodePlayground";
-import PlaygroundHeader from "./CodePlayground/PlaygroundHeader";
+import PlaygroundHeader from "./CodePlayground/Console/PlaygroundHeader";
 import {
   PlaygroundProvider,
   usePlayground,
