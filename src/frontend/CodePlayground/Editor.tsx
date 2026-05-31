@@ -17,9 +17,17 @@ export default function Editor({}: Props) {
     editorRef.current = editor;
   };
   return (
-    <div>
-      {" "}
-      <div className="flex gap-3 text-gray-600">
+    <div className="flex border">
+      <MonacoEditor
+        height={fullscreen ? "calc(100vh - 220px)" : "300px"}
+        language="haskell"
+        theme="vs-light"
+        value={code}
+        onChange={(v) => setCode(v ?? "")}
+        onMount={handleEditorMount}
+        options={{ minimap: { enabled: false }, wordWrap: "on" }}
+      />
+      <div className="flex flex-col text-gray-600">
         <button
           onClick={() => setFullscreen(!fullscreen)}
           title={t("fullscreen")}>
@@ -36,15 +44,6 @@ export default function Editor({}: Props) {
           ↺
         </button>
       </div>
-      <MonacoEditor
-        height={fullscreen ? "calc(100vh - 220px)" : "300px"}
-        language="haskell"
-        theme="vs-light"
-        value={code}
-        onChange={(v) => setCode(v ?? "")}
-        onMount={handleEditorMount}
-        options={{ minimap: { enabled: false }, wordWrap: "on" }}
-      />
     </div>
   );
 }
