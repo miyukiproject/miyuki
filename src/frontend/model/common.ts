@@ -9,6 +9,7 @@ export enum PlaygroundViews {
   LIBRARY,
   CONSOLE,
 }
+
 export type ExerciseResult = {
   tests: TestReport[] | null;
   expectations: AnalysisResult[] | null;
