@@ -1,18 +1,35 @@
+import { PlayIcon } from "../icons/Icons";
+import { PlaygroundViews } from "../model/common";
+import Console from "./Console";
 import Editor from "./Editor";
+import Library from "./Library";
 import { usePlayground } from "./PlaygroundContext";
 
-type Props = {};
-
-export default function CodePlayground({}: Props) {
-  const { submit, processing } = usePlayground();
+export default function CodePlayground({}) {
+  const { submit, processing, activeView } = usePlayground();
 
   return (
     <div className="flex flex-col">
-      <Editor />
+      <PlaygroundView activeView={activeView} />
       <SubmitButton onClick={submit} disabled={processing} />
     </div>
   );
 }
+
+type Props = {
+  activeView: PlaygroundViews;
+};
+
+const PlaygroundView = ({ activeView }: Props) => {
+  switch (activeView) {
+    case PlaygroundViews.EDITOR:
+      return <Editor />;
+    case PlaygroundViews.CONSOLE:
+      return <Console />;
+    case PlaygroundViews.LIBRARY:
+      return <Library />;
+  }
+};
 
 const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
   onClick,
@@ -24,15 +41,7 @@ const SubmitButton: React.FC<{ onClick: () => void; disabled?: boolean }> = ({
     className={`w-full py-3 rounded font-semibold flex justify-center items-center gap-1 text-white ${
       disabled ? "bg-gray-400" : "bg-mumuki-rose hover:bg-mumuki-rose-darken"
     }`}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="25"
-      height="25"
-      fill="currentColor"
-      className="bi bi-play-fill"
-      viewBox="0 0 16 16">
-      <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393" />
-    </svg>
+    <PlayIcon width={25} height={25} />
     <span>Enviar</span>
   </button>
 );

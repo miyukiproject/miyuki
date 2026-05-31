@@ -8,7 +8,7 @@ type Props = {
   exercise: any;
 };
 
-const interpreterConfig: InterpreterConfig = {
+export const interpreterConfig: InterpreterConfig = {
   lazyLoading: true,
   mutability: false,
   debug: false,
