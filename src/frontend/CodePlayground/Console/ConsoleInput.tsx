@@ -1,8 +1,7 @@
 import { Dispatch, KeyboardEvent, Ref, SetStateAction, useState } from "react";
-import { interpreterConfig, usePlayground } from "../PlaygroundContext";
+import { usePlayground } from "../PlaygroundContext";
+import { useYukigo } from "../../hooks/useYukigo";
 import { Entry } from "./Console";
-import { YukigoHaskellParser } from "yukigo-haskell-parser";
-import { Interpreter } from "yukigo";
 
 type InputProps = {
   inputRef: Ref<HTMLInputElement>;
@@ -17,6 +16,7 @@ export const ConsoleInput = ({ inputRef, history, setHistory }: InputProps) => {
     code,
     exercise: { extra },
   } = usePlayground();
+  const { evaluate } = useYukigo();
   const [input, setInput] = useState("");
   const [historyIndex, setHistoryIndex] = useState(-1);
 
@@ -30,13 +30,7 @@ export const ConsoleInput = ({ inputRef, history, setHistory }: InputProps) => {
     ];
 
     try {
-      const parser = new YukigoHaskellParser();
-      const ast = parser.parse(extra + "\n" + code);
-      const expression = parser.parseExpression(command);
-
-      const interpreter = new Interpreter(ast, interpreterConfig);
-
-      const result = interpreter.evaluate(expression);
+      const result = evaluate(code, extra, command);
       const response: Entry = {
         type: "output",
         content: String(result),

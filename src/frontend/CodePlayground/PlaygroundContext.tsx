@@ -1,26 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { ExerciseResult, PlaygroundViews } from "../model/common";
-import { Analyzer, MulangAdapter, Tester, TestReport } from "yukigo";
-import { YukigoHaskellParser } from "yukigo-haskell-parser";
-import { InterpreterConfig } from "yukigo/dist/interpreter/components/RuntimeContext";
-
-type Props = {
-  exercise: any;
-};
-
-export const interpreterConfig: InterpreterConfig = {
-  lazyLoading: true,
-  mutability: false,
-  debug: false,
-  outputMode: "first",
-};
-
-export const resultStatus = (reports: TestReport[]) =>
-  reports.every((res) => res.status === "passed")
-    ? "passed"
-    : reports.every((res) => res.status === "error")
-      ? "error"
-      : "failed";
+import { resultStatus, useYukigo } from "../hooks/useYukigo";
 
 interface PlaygroundContextType {
   code: string;
@@ -54,6 +34,7 @@ export const PlaygroundProvider: React.FC<{
   exercise: any;
   children: ReactNode;
 }> = ({ exercise, children }) => {
+  const { runTests, runAnalysis } = useYukigo();
   const [code, setCode] = useState<string>(exercise.default_content ?? "");
   const [processing, setProcessing] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<PlaygroundViews>(
@@ -74,23 +55,11 @@ export const PlaygroundProvider: React.FC<{
     setProcessing(true);
     setResults(baseResult);
     try {
-      const parser = new YukigoHaskellParser();
-      const ast = parser.parse(
-        exercise.extra ? exercise.extra.concat(code) : code,
-      );
-      const tester = new Tester(ast, interpreterConfig);
-      const testResults = tester.test(parser.parse(exercise.test));
+      const { ast, testResults } = runTests(code, exercise.extra, exercise.test);
       setResults((results) => ({ ...results, tests: testResults }));
 
       if (resultStatus(testResults) === "passed") {
-        const analyzer = new Analyzer();
-        const adapter = new MulangAdapter();
-        const expectations =
-          exercise.expectations.map((exp) =>
-            adapter.translateMulangInspection(exp),
-          ) || [];
-        const expectationResults = analyzer.analyze(ast, expectations);
-        console.log(expectationResults);
+        const expectationResults = runAnalysis(ast, exercise.expectations);
         setResults((results) => ({
           ...results,
           expectations: expectationResults,
