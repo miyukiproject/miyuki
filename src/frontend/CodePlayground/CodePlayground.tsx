@@ -16,7 +16,7 @@ export default function CodePlayground({}) {
   );
 }
 
-type Props = {
+type PlaygroundViewProps = {
   activeView: PlaygroundViews;
 };
 
