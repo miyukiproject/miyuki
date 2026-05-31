@@ -24,6 +24,7 @@ export const usePlayground = () => {
     throw new Error("usePlayground debe usarse dentro de PlaygroundProvider");
   return context;
 };
+
 const baseResult: ExerciseResult = {
   tests: null,
   expectations: null,

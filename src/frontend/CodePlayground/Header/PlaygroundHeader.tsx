@@ -3,9 +3,9 @@ import { usePlayground } from "../PlaygroundContext";
 import { PlaygroundViews } from "../../model/common";
 import { PlaygroundButton } from "./PlaygroundButton";
 
-type Props = {};
+type PlaygroundHeaderProps = {};
 
-export default function PlaygroundHeader({}: Props) {
+export default function PlaygroundHeader({}: PlaygroundHeaderProps) {
   const { exercise, activeView, setActiveView } = usePlayground();
   return (
     <div className="flex items-center border-b">

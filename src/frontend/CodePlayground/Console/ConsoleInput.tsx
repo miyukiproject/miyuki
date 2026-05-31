@@ -60,6 +60,7 @@ export const ConsoleInput = ({ inputRef, history, setHistory }: InputProps) => {
     }
     event.preventDefault();
   };
+  
   const handleArrowDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const commands = history.filter((h) => h.type === "command");
     if (historyIndex !== -1) {

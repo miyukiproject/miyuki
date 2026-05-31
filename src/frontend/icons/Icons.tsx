@@ -92,6 +92,7 @@ export const PencilIcon = ({ className, width, height }: IconProps) => {
     </svg>
   );
 };
+
 export const CodeIcon = ({ className, width, height }: IconProps) => {
   return (
     <svg
@@ -105,6 +106,7 @@ export const CodeIcon = ({ className, width, height }: IconProps) => {
     </svg>
   );
 };
+
 export const TerminalIcon = ({ className, width, height }: IconProps) => {
   return (
     <svg
@@ -119,6 +121,7 @@ export const TerminalIcon = ({ className, width, height }: IconProps) => {
     </svg>
   );
 };
+
 export const PlayIcon = ({ className, width, height }: IconProps) => {
   return (
     <svg
