@@ -17,10 +17,6 @@ import {
   usePlayground,
 } from "./CodePlayground/PlaygroundContext";
 
-type FeedbackData = Record<string, string>;
-const populate = (template: string, data: FeedbackData) =>
-  template.replace(/\${(\w+)}/g, (_, key) => data[key]);
-
 const exerciseModules = import.meta.glob("../exercises/**/*", { eager: true });
 
 // TODO next should be generic, not just exercise
