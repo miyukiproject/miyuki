@@ -39,7 +39,7 @@ export class Problem extends Challenge {
     hint: string,
     tagList: string[] = [],
     layout: string,
-    public defaultCode?: string,
+    public default_content?: string,
     public expectations: string[] = [],
     public test?: string,
     public manualEvaluation: boolean = false
