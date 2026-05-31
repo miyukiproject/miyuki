@@ -7,6 +7,7 @@ type Props = {
   expectations: AnalysisResult[] | null;
   error: Error | null;
 };
+import { usePlayground } from "./CodePlayground/PlaygroundContext";
 
 const testsOk = (tests: TestReport[]) =>
   tests.every((res) => res.status === "passed");
@@ -184,12 +185,15 @@ const SuccessFeedback = () => {
   </FeedbackContainer>;
 };
 
-export default function Feedback({ results, expectations, error }: Props) {
-  if (!results && !expectations && !error) return <></>;
+export default function Feedback() {
+  const {
+    results: { tests, expectations, error },
+  } = usePlayground();
+  if (!tests && !expectations && !error) return <></>;
 
   if (error) return <ErrorFeedback error={error} />;
 
-  if (results && !testsOk(results)) return <TestsFeedback results={results} />;
+  if (tests && !testsOk(tests)) return <TestsFeedback results={tests} />;
 
   if (expectations && !expectationsOk(expectations))
     return <ExpectationsFeedback expectations={expectations} />;
